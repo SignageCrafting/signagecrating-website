@@ -1,0 +1,12 @@
+# Used only when the site is served as static files (Hostinger static hosting).
+# Sends every page address (/quote, /about, ...) to the app instead of a 404.
+# When the site runs as a Node.js server app, server.js handles routing and
+# this file is ignored.
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+  RewriteRule ^index\.html$ - [L]
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule . /index.html [L]
+</IfModule>
