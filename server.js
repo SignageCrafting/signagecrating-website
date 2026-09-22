@@ -12,6 +12,8 @@
 //   SESSION_SECRET      optional, generated and stored in DATA_DIR if missing
 //   DATA_DIR            optional, where content/uploads/leads live (see defaultDataDir)
 //   PORT                set by Hostinger
+// Hostinger starts this file through LiteSpeed's lsnode.js, which loads it with
+// require(). That fails on any top-level `await`, so keep startup synchronous.
 process.env.NODE_ENV ??= 'production';
 
 import express from 'express';
@@ -261,8 +263,23 @@ async function recentAudit(limit) {
   }
 }
 
-let savedContent = await readJson(CONTENT_FILE, null);
-let savedAt = savedContent ? (await fsp.stat(CONTENT_FILE).catch(() => null))?.mtime.toISOString() ?? null : null;
+function readJsonSync(file, fallback) {
+  try {
+    return JSON.parse(fs.readFileSync(file, 'utf8'));
+  } catch {
+    return fallback;
+  }
+}
+
+let savedContent = readJsonSync(CONTENT_FILE, null);
+let savedAt = null;
+if (savedContent) {
+  try {
+    savedAt = fs.statSync(CONTENT_FILE).mtime.toISOString();
+  } catch {
+    // Leave savedAt empty.
+  }
+}
 
 // ---------------------------------------------------------------------------
 // Server-side rendering bundle
@@ -285,7 +302,9 @@ async function loadBuildOutput() {
   }
 }
 
-await loadBuildOutput();
+// The template is read synchronously inside loadBuildOutput; the server bundle
+// loads asynchronously and requests wait for it (see the middleware below).
+let buildReady = loadBuildOutput();
 
 // Safety net: if the host started the app without running `npm run build`,
 // build it now (Vite only, no type check) and switch over when it's done.
@@ -311,7 +330,8 @@ function buildInBackground() {
   run(['build'])
     .then((ok) => ok && run(['build', '--ssr', 'src/entry-server.tsx', '--outDir', 'dist-server']))
     .then(async (ok) => {
-      await loadBuildOutput();
+      buildReady = loadBuildOutput();
+      await buildReady;
       building = false;
       console.log(ok && template ? '[server] Build finished; the site is live.' : '[server] Build failed; see the log above.');
     });
@@ -342,6 +362,9 @@ const app = express();
 app.disable('x-powered-by');
 app.set('trust proxy', 1);
 app.use(compression());
+app.use((req, res, next) => {
+  buildReady.then(() => next(), next);
+});
 
 function contentSecurityPolicy(nonce, secure) {
   return [
