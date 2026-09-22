@@ -39,7 +39,7 @@ without `node_modules`), then use:
 |---|---|
 | Framework preset | Express (or "Other") |
 | Node.js version | 22 |
-| Build command | `npm run build` |
+| Build command | `npm run build`, or leave on Default (the site builds automatically after `npm install`) |
 | Output directory | leave empty |
 | Entry file | `server.js` |
 

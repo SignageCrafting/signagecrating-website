@@ -16,6 +16,7 @@ process.env.NODE_ENV ??= 'production';
 
 import express from 'express';
 import compression from 'compression';
+import { spawn } from 'node:child_process';
 import crypto from 'node:crypto';
 import fs from 'node:fs';
 import fsp from 'node:fs/promises';
@@ -268,18 +269,55 @@ let savedAt = savedContent ? (await fsp.stat(CONTENT_FILE).catch(() => null))?.m
 // ---------------------------------------------------------------------------
 
 let ssr = null;
-try {
-  ssr = await import(pathToFileURL(SSR_ENTRY).href);
-} catch (err) {
-  console.error('[ssr] Could not load dist-server/entry-server.js. Run `npm run build`. Pages will render in the browser only.', err.message);
+let template = '';
+
+async function loadBuildOutput() {
+  try {
+    template = fs.readFileSync(path.join(DIST, 'index.html'), 'utf8');
+  } catch {
+    template = '';
+  }
+  try {
+    ssr = await import(`${pathToFileURL(SSR_ENTRY).href}?t=${Date.now()}`);
+  } catch (err) {
+    ssr = null;
+    if (template) console.error('[ssr] Could not load dist-server/entry-server.js; pages will render in the browser only.', err.message);
+  }
 }
 
-let template = '';
-try {
-  template = fs.readFileSync(path.join(DIST, 'index.html'), 'utf8');
-} catch {
-  console.error('[server] dist/index.html is missing. Run `npm run build` first.');
+await loadBuildOutput();
+
+// Safety net: if the host started the app without running `npm run build`,
+// build it now (Vite only, no type check) and switch over when it's done.
+let building = false;
+function buildInBackground() {
+  if (building || template) return;
+  const vite = path.join(ROOT, 'node_modules', 'vite', 'bin', 'vite.js');
+  if (!fs.existsSync(vite)) {
+    console.error('[server] The site is not built and Vite is not installed. Set the build command to `npm run build`.');
+    return;
+  }
+  building = true;
+  console.log('[server] The site is not built yet; building it now…');
+  const run = (args) =>
+    new Promise((resolve) => {
+      const child = spawn(process.execPath, [vite, ...args], { cwd: ROOT, stdio: 'inherit' });
+      child.on('exit', (code) => resolve(code === 0));
+      child.on('error', (err) => {
+        console.error('[server] Build could not start:', err.message);
+        resolve(false);
+      });
+    });
+  run(['build'])
+    .then((ok) => ok && run(['build', '--ssr', 'src/entry-server.tsx', '--outDir', 'dist-server']))
+    .then(async (ok) => {
+      await loadBuildOutput();
+      building = false;
+      console.log(ok && template ? '[server] Build finished; the site is live.' : '[server] Build failed; see the log above.');
+    });
 }
+
+if (!template) buildInBackground();
 
 function scriptJson(value) {
   return JSON.stringify(value ?? null)
@@ -715,7 +753,14 @@ app.get(['/llms.txt', '/llms-full.txt'], (req, res) => {
 // ---------------------------------------------------------------------------
 
 app.get('*', (req, res) => {
-  if (!template) return res.status(503).type('text/plain').send('Site is being built. Please try again in a minute.');
+  if (!template) {
+    buildInBackground();
+    return res
+      .status(200)
+      .set({ 'Cache-Control': 'no-store', 'X-Robots-Tag': 'noindex' })
+      .type('html')
+      .send('<!doctype html><meta charset="utf-8"><meta name="robots" content="noindex"><meta http-equiv="refresh" content="15"><title>Signage Crafting</title><body style="font-family:system-ui,sans-serif;background:#080c0d;color:#fff;display:grid;place-items:center;height:100vh;margin:0"><p>We\u2019re updating the website. This page will refresh in a few seconds.</p>');
+  }
 
   const nonce = crypto.randomBytes(16).toString('base64');
   const isAdmin = req.path === '/admin' || req.path.startsWith('/admin/');

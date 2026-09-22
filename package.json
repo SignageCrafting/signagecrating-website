@@ -10,6 +10,7 @@
     "dev": "vite",
     "dev:api": "PORT=3001 node server.js",
     "build": "tsc -b && vite build && vite build --ssr src/entry-server.tsx --outDir dist-server",
+    "postinstall": "npm run build",
     "start": "node server.js",
     "lint": "eslint .",
     "admin:password": "node scripts/make-password.mjs",
