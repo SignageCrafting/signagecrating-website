@@ -29,7 +29,8 @@ export default function Login({ session, onSuccess }: { session: Session; onSucc
     <div className="flex min-h-screen items-center justify-center bg-slate-50 px-4 py-12 dark:bg-slate-950">
       <div className="w-full max-w-sm">
         <div className="mb-8 text-center">
-          <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-slate-900 text-lg font-bold text-teal-300 dark:bg-slate-800">SC</div>
+          <img src="/logo-mark-light.png" alt="Signage Crafting" width={92} height={48} className="mx-auto mb-4 h-12 w-auto dark:hidden" />
+          <img src="/logo-mark-dark.png" alt="Signage Crafting" width={92} height={48} className="mx-auto mb-4 hidden h-12 w-auto dark:block" />
           <h1 className="text-xl font-semibold text-slate-900 dark:text-white">Signage Crafting Admin</h1>
           <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">Sign in to edit your website</p>
         </div>
@@ -56,7 +57,7 @@ export default function Login({ session, onSuccess }: { session: Session; onSucc
               </div>
             )}
             {error && <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700 dark:bg-red-950 dark:text-red-300" role="alert">{error}</p>}
-            <button type="submit" disabled={busy} className="flex w-full items-center justify-center gap-2 rounded-lg bg-teal-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-teal-700 disabled:opacity-60">
+            <button type="submit" disabled={busy} className="flex w-full items-center justify-center gap-2 rounded-lg bg-brand-700 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-800 disabled:opacity-60">
               {busy ? <Loader2 size={16} className="animate-spin" /> : <Lock size={16} />} Sign in
             </button>
           </form>

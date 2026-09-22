@@ -173,7 +173,10 @@ function businessNode(content: SiteContent, origin: string) {
       })),
     },
   };
-  if (business.logoImage) node.logo = abs(origin, business.logoImage);
+  // Google shows logos on white, where the white "C" of the built-in logo would
+  // vanish, so use the dark square icon unless a custom logo was uploaded.
+  const customLogo = business.logoImage && !business.logoImage.startsWith('/logo-mark-');
+  node.logo = abs(origin, customLogo ? business.logoImage : '/icon-512.png');
   if (seo.latitude && seo.longitude) {
     node.geo = { '@type': 'GeoCoordinates', latitude: Number(seo.latitude), longitude: Number(seo.longitude) };
   }

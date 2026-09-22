@@ -61,6 +61,10 @@ export function useContent() {
   return useContext(ContentContext);
 }
 
+export function logoFor(business: SiteContent['business'], isDark: boolean) {
+  return isDark ? business.logoImage : business.logoImageLight || business.logoImage;
+}
+
 export function telHref(phone: string) {
   const digits = phone.replace(/[^\d+]/g, '');
   return `tel:${digits}`;

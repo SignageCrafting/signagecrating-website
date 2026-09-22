@@ -10,7 +10,7 @@ interface Props {
 // Native <details> keeps every answer in the HTML, so search engines and AI
 // assistants can read it even while it's collapsed.
 export default function FaqList({ items, isDark }: Props) {
-  const accent = isDark ? '#00f3ff' : '#0d9488';
+  const accent = isDark ? '#fd4601' : '#c43500';
   const heading = isDark ? '#fff' : '#1a1a1a';
   const text = isDark ? '#888' : '#5a5a5a';
   const cardBg = isDark ? '#111' : '#f0ece5';

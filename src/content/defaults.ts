@@ -6,7 +6,8 @@ export const defaultContent: SiteContent = {
   business: {
     name: 'Signage Crafting',
     logoText: 'SC',
-    logoImage: '',
+    logoImage: '/logo-mark-dark.png',
+    logoImageLight: '/logo-mark-light.png',
     phone: '+1 (209) 340-4633',
     email: 'info@signagecrafting.com',
     hours: 'Mon-Fri 8AM-6PM',

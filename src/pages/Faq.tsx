@@ -8,13 +8,13 @@ export default function Faq() {
   const theme = useStore((s) => s.theme);
   const { business, faq } = useContent();
   const isDark = theme === 'dark';
-  const accent = isDark ? '#00f3ff' : '#0d9488';
+  const accent = isDark ? '#fd4601' : '#c43500';
   const heading = isDark ? '#fff' : '#1a1a1a';
   const text = isDark ? '#888' : '#5a5a5a';
   const border = isDark ? '#2a2a2a' : '#d4d0c8';
 
   return (
-    <div className="pt-24 pb-20 transition-colors duration-300" style={{ backgroundColor: isDark ? '#0a0a0a' : '#f8f5f0' }}>
+    <div className="pt-24 pb-20 transition-colors duration-300" style={{ backgroundColor: isDark ? '#080c0d' : '#f8f5f0' }}>
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <p className="font-mono text-xs tracking-[0.2em] uppercase mb-3" style={{ color: accent }}>{faq.label}</p>
@@ -24,11 +24,11 @@ export default function Faq() {
 
         <FaqList items={faq.items} isDark={isDark} />
 
-        <div className="mt-12 text-center p-8 rounded-2xl border" style={{ backgroundColor: isDark ? '#050505' : '#f0ece5', borderColor: border }}>
+        <div className="mt-12 text-center p-8 rounded-2xl border" style={{ backgroundColor: isDark ? '#050809' : '#f0ece5', borderColor: border }}>
           <h2 className="font-trajan font-bold text-xl md:text-2xl mb-4" style={{ color: heading }}>Still have a question?</h2>
           <div className="flex flex-wrap items-center justify-center gap-4">
             <a href={telHref(business.phone)} className="btn-outline text-sm" style={{ border: `1px solid ${border}`, color: text }}><Phone size={14} /> {business.phone}</a>
-            <Link to="/contact" className="btn-primary text-sm" style={{ backgroundColor: accent, color: isDark ? '#0a0a0a' : '#fff' }}>CONTACT US <ArrowRight size={14} /></Link>
+            <Link to="/contact" className="btn-primary text-sm" style={{ backgroundColor: accent, color: isDark ? '#080c0d' : '#fff' }}>CONTACT US <ArrowRight size={14} /></Link>
           </div>
         </div>
       </div>

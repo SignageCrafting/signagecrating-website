@@ -71,7 +71,7 @@ export default function MediaLibrary({ onPick }: Props) {
         </div>
         <div>
           <input ref={fileInput} type="file" accept="image/jpeg,image/png,image/webp,image/gif,image/avif" multiple className="hidden" onChange={(e) => upload(e.target.files)} />
-          <button type="button" disabled={busy} onClick={() => fileInput.current?.click()} className="inline-flex items-center gap-2 rounded-lg bg-teal-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-teal-700 disabled:opacity-60">
+          <button type="button" disabled={busy} onClick={() => fileInput.current?.click()} className="inline-flex items-center gap-2 rounded-lg bg-brand-700 px-4 py-2 text-sm font-semibold text-white transition hover:bg-brand-800 disabled:opacity-60">
             {busy ? <Loader2 size={16} className="animate-spin" /> : <Upload size={16} />} {busy ? 'Uploading…' : 'Upload images'}
           </button>
         </div>

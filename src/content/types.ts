@@ -72,6 +72,7 @@ export interface SiteContent {
     name: string;
     logoText: string;
     logoImage: string;
+    logoImageLight: string;
     phone: string;
     email: string;
     hours: string;

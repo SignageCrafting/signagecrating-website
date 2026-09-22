@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { NavLink, Route, Routes, useLocation } from 'react-router-dom';
 import { CheckCircle2, ExternalLink, History as HistoryIcon, Image, Inbox, LayoutDashboard, Loader2, LogOut, Menu, Moon, Sun, X } from 'lucide-react';
 import { useStore } from '@/store/useStore';
-import { mergeContent } from '@/content/store';
+import { logoFor, mergeContent } from '@/content/store';
 import type { SiteContent } from '@/content/types';
 import { api, ApiError, type Session } from './api';
 import { AdminContext } from './context';
@@ -33,7 +33,7 @@ function useAdminTheme() {
 const navItem = ({ isActive }: { isActive: boolean }) =>
   `flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium transition ${
     isActive
-      ? 'bg-teal-50 text-teal-800 dark:bg-teal-950/60 dark:text-teal-200'
+      ? 'bg-brand-50 text-brand-800 dark:bg-brand-950/60 dark:text-brand-200'
       : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white'
   }`;
 
@@ -136,7 +136,8 @@ function Shell({ onSignedOut, dark, toggleTheme }: { onSignedOut: () => void; da
   const sidebar = (
     <nav className="flex h-full flex-col gap-6 overflow-y-auto p-4" aria-label="Admin">
       <div className="flex items-center gap-2.5 px-2">
-        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-900 text-xs font-bold text-teal-300 dark:bg-slate-800">SC</div>
+        <img src={logoFor(contextValue.content.business, false) || '/logo-mark-light.png'} alt="" width={61} height={32} className="h-8 w-auto dark:hidden" />
+        <img src={logoFor(contextValue.content.business, true) || '/logo-mark-dark.png'} alt="" width={61} height={32} className="hidden h-8 w-auto dark:block" />
         <div>
           <p className="text-sm font-semibold text-slate-900 dark:text-white">Signage Crafting</p>
           <p className="text-xs text-slate-500 dark:text-slate-400">Website admin</p>
@@ -146,7 +147,7 @@ function Shell({ onSignedOut, dark, toggleTheme }: { onSignedOut: () => void; da
         <NavLink to="/admin" end className={navItem}><LayoutDashboard size={16} /> Dashboard</NavLink>
         <NavLink to="/admin/leads" className={navItem}>
           <Inbox size={16} /> Leads
-          {unread > 0 && <span className="ml-auto rounded-full bg-teal-600 px-2 py-0.5 text-[11px] font-semibold text-white">{unread}</span>}
+          {unread > 0 && <span className="ml-auto rounded-full bg-brand-700 px-2 py-0.5 text-[11px] font-semibold text-white">{unread}</span>}
         </NavLink>
       </div>
       {sectionGroups.map((group) => (
@@ -203,7 +204,7 @@ function Shell({ onSignedOut, dark, toggleTheme }: { onSignedOut: () => void; da
               )}
             </div>
             <button type="button" disabled={!dirty || saving} onClick={() => setDraft(saved)} className="hidden rounded-lg px-3 py-2 text-sm font-medium text-slate-600 transition hover:bg-slate-100 disabled:opacity-40 sm:block dark:text-slate-300 dark:hover:bg-slate-800">Discard</button>
-            <button type="button" disabled={!dirty || saving} onClick={save} className="inline-flex items-center gap-2 rounded-lg bg-teal-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-teal-700 disabled:opacity-40" title="Save (Ctrl/⌘ + S)">
+            <button type="button" disabled={!dirty || saving} onClick={save} className="inline-flex items-center gap-2 rounded-lg bg-brand-700 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-800 disabled:opacity-40" title="Save (Ctrl/⌘ + S)">
               {saving && <Loader2 size={15} className="animate-spin" />} Save changes
             </button>
           </header>
@@ -211,7 +212,7 @@ function Shell({ onSignedOut, dark, toggleTheme }: { onSignedOut: () => void; da
           {notice && (
             <div className="fixed bottom-4 right-4 z-50 max-w-sm" role="status">
               <div className={`flex items-start gap-2 rounded-xl px-4 py-3 text-sm shadow-lg ${notice.kind === 'ok' ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-900' : 'bg-red-600 text-white'}`}>
-                {notice.kind === 'ok' && <CheckCircle2 size={17} className="mt-0.5 shrink-0 text-teal-400 dark:text-teal-600" />}
+                {notice.kind === 'ok' && <CheckCircle2 size={17} className="mt-0.5 shrink-0 text-brand-400 dark:text-brand-600" />}
                 {notice.text}
               </div>
             </div>

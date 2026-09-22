@@ -111,7 +111,8 @@ export const sections: Section[] = [
     fields: [
       { kind: 'text', key: 'name', label: 'Business name', half: true },
       { kind: 'text', key: 'logoText', label: 'Logo text', help: 'Shown when no logo image is set', half: true },
-      { kind: 'image', key: 'logoImage', label: 'Logo image', help: 'Optional. Replaces the logo text in the header and footer. A wide PNG with a transparent background works best.' },
+      { kind: 'image', key: 'logoImage', label: 'Logo (dark theme)', help: 'Shown on dark backgrounds, and on light ones too if no light-theme logo is set. Use a PNG with a transparent background.' },
+      { kind: 'image', key: 'logoImageLight', label: 'Logo (light theme)', help: 'Optional version for light backgrounds, e.g. with dark letters instead of white.' },
       { kind: 'text', key: 'phone', label: 'Phone number', placeholder: '+1 (209) 340-4633', half: true },
       { kind: 'text', key: 'email', label: 'Email address', half: true },
       { kind: 'text', key: 'hours', label: 'Business hours', placeholder: 'Mon-Fri 8AM-6PM', half: true },

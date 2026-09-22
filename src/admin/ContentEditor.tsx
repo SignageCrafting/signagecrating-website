@@ -13,7 +13,7 @@ export default function ContentEditor() {
     <div>
       <div className="mb-6 flex flex-wrap items-start justify-between gap-4">
         <div className="flex items-start gap-3">
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-teal-50 text-teal-700 dark:bg-teal-950 dark:text-teal-300"><Icon size={20} /></div>
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-brand-50 text-brand-700 dark:bg-brand-950 dark:text-brand-300"><Icon size={20} /></div>
           <div>
             <h1 className="text-xl font-semibold text-slate-900 dark:text-white">{section.title}</h1>
             <p className="mt-0.5 max-w-2xl text-sm text-slate-500 dark:text-slate-400">{section.description}</p>

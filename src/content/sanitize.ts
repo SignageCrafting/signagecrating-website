@@ -34,7 +34,7 @@ function slug(value: string) {
 }
 
 const LONG_FIELDS = new Set(['body', 'answer', 'story', 'description']);
-const IMAGE_FIELDS = new Set(['image', 'logoImage', 'ogImage']);
+const IMAGE_FIELDS = new Set(['image', 'logoImage', 'logoImageLight', 'ogImage']);
 const IMAGE_LISTS = new Set(['images', 'cubeImages']);
 const LINK_FIELDS = new Set(['path', 'ctaPath']);
 

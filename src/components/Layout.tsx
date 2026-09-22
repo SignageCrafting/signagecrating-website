@@ -41,7 +41,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="min-h-screen transition-colors duration-300" style={{
-      backgroundColor: theme === 'dark' ? '#0a0a0a' : '#f8f5f0',
+      backgroundColor: theme === 'dark' ? '#080c0d' : '#f8f5f0',
       color: theme === 'dark' ? '#ffffff' : '#1a1a1a',
     }}>
       <Navbar />

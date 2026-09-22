@@ -137,11 +137,11 @@ export default function Leads({ onUnreadChange }: { onUnreadChange: (n: number) 
             return (
               <div key={lead.id}>
                 <button type="button" onClick={() => toggle(lead)} className="flex w-full items-center gap-3 px-4 py-3.5 text-left transition hover:bg-slate-50 dark:hover:bg-slate-800/50" aria-expanded={isOpen}>
-                  <span className={`h-2 w-2 shrink-0 rounded-full ${lead.read ? 'bg-transparent' : 'bg-teal-500'}`} aria-label={lead.read ? undefined : 'Unread'} />
+                  <span className={`h-2 w-2 shrink-0 rounded-full ${lead.read ? 'bg-transparent' : 'bg-brand-500'}`} aria-label={lead.read ? undefined : 'Unread'} />
                   <div className="min-w-0 flex-1">
                     <div className="flex flex-wrap items-center gap-2">
                       <span className={`truncate text-sm ${lead.read ? 'font-medium text-slate-700 dark:text-slate-200' : 'font-semibold text-slate-900 dark:text-white'}`}>{leadName(lead)}</span>
-                      <span className={`rounded-full px-2 py-0.5 text-[11px] font-medium ${lead.type === 'quote' ? 'bg-teal-50 text-teal-700 dark:bg-teal-950 dark:text-teal-300' : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300'}`}>{lead.type === 'quote' ? 'Quote' : 'Message'}</span>
+                      <span className={`rounded-full px-2 py-0.5 text-[11px] font-medium ${lead.type === 'quote' ? 'bg-brand-50 text-brand-700 dark:bg-brand-950 dark:text-brand-300' : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300'}`}>{lead.type === 'quote' ? 'Quote' : 'Message'}</span>
                       {lead.fields.signType && <span className="text-xs text-slate-500 dark:text-slate-400">{lead.fields.signType}</span>}
                     </div>
                     <p className="mt-0.5 truncate text-sm text-slate-500 dark:text-slate-400">{summary}</p>
@@ -165,7 +165,7 @@ export default function Leads({ onUnreadChange }: { onUnreadChange: (n: number) 
                     </dl>
                     <div className="mt-4 flex flex-wrap gap-2">
                       {lead.fields.email && (
-                        <a href={`mailto:${lead.fields.email}`} className="inline-flex items-center gap-1.5 rounded-lg bg-teal-600 px-3 py-2 text-sm font-medium text-white hover:bg-teal-700"><Mail size={14} /> Reply by email</a>
+                        <a href={`mailto:${lead.fields.email}`} className="inline-flex items-center gap-1.5 rounded-lg bg-brand-700 px-3 py-2 text-sm font-medium text-white hover:bg-brand-800"><Mail size={14} /> Reply by email</a>
                       )}
                       {lead.fields.phone && (
                         <a href={`tel:${lead.fields.phone.replace(/[^\d+]/g, '')}`} className="inline-flex items-center gap-1.5 rounded-lg border border-slate-300 px-3 py-2 text-sm font-medium text-slate-700 hover:bg-white dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-900"><Phone size={14} /> Call</a>

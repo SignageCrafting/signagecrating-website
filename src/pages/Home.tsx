@@ -23,7 +23,7 @@ function SignCube3D({ isDark, images }: { isDark: boolean; images: string[] }) {
     <div className="hidden lg:block absolute right-[5%] top-1/2 -translate-y-1/2 w-[380px] h-[380px]" style={{ perspective: '1000px' }}>
       <div className="relative w-full h-full animate-spin-3d" style={{ transformStyle: 'preserve-3d' }}>
         {cubeFaces.map((transform, i) => (
-          <div key={i} className="absolute inset-0 rounded-xl overflow-hidden border-2" style={{ transform, borderColor: isDark ? '#00f3ff' : '#0d9488' }}>
+          <div key={i} className="absolute inset-0 rounded-xl overflow-hidden border-2" style={{ transform, borderColor: isDark ? '#fd4601' : '#c43500' }}>
             <img src={images[i % images.length]} alt="" className="w-full h-full object-cover" />
           </div>
         ))}
@@ -40,8 +40,8 @@ export default function Home() {
   const homeSignTypes = signTypes.filter((s) => s.showOnHome);
   const tel = telHref(business.phone);
   const isDark = theme === 'dark';
-  const accent = isDark ? '#00f3ff' : '#0d9488';
-  const bg = isDark ? '#0a0a0a' : '#f8f5f0';
+  const accent = isDark ? '#fd4601' : '#c43500';
+  const bg = isDark ? '#080c0d' : '#f8f5f0';
   const cardBg = isDark ? '#111' : '#f0ece5';
   const border = isDark ? '#2a2a2a' : '#d4d0c8';
   const text = isDark ? '#888' : '#5a5a5a';
@@ -56,7 +56,7 @@ export default function Home() {
           <div className="grid lg:grid-cols-2 gap-10 items-center">
             <FadeIn eager>
               {hero.badge && (
-                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-mono mb-6" style={{ backgroundColor: isDark ? 'rgba(0,243,255,0.1)' : 'rgba(13,148,136,0.1)', color: accent, border: `1px solid ${isDark ? 'rgba(0,243,255,0.2)' : 'rgba(13,148,136,0.2)'}` }}>
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-mono mb-6" style={{ backgroundColor: isDark ? 'rgba(253,70,1,0.1)' : 'rgba(196,53,0,0.1)', color: accent, border: `1px solid ${isDark ? 'rgba(253,70,1,0.2)' : 'rgba(196,53,0,0.2)'}` }}>
                   <Star size={12} fill={accent} /> {hero.badge}
                 </div>
               )}
@@ -69,7 +69,7 @@ export default function Home() {
               <div className="space-y-3 mb-10">
                 {hero.features.map((feat, i) => (
                   <div key={i} className="flex items-center gap-3">
-                    <div className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: isDark ? 'rgba(0,243,255,0.15)' : 'rgba(13,148,136,0.15)' }}>
+                    <div className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: isDark ? 'rgba(253,70,1,0.15)' : 'rgba(196,53,0,0.15)' }}>
                       <Check size={12} style={{ color: accent }} />
                     </div>
                     <span className="font-helvetica text-sm" style={{ color: text }}>{feat}</span>
@@ -77,7 +77,7 @@ export default function Home() {
                 ))}
               </div>
               <div className="flex flex-wrap gap-4">
-                <Link to="/quote" className="btn-primary" style={{ backgroundColor: accent, color: isDark ? '#0a0a0a' : '#fff' }}>{hero.ctaLabel} <ArrowRight size={16} /></Link>
+                <Link to="/quote" className="btn-primary" style={{ backgroundColor: accent, color: isDark ? '#080c0d' : '#fff' }}>{hero.ctaLabel} <ArrowRight size={16} /></Link>
                 <a href={tel} className="btn-outline" style={{ border: `1px solid ${border}`, color: text }}><Phone size={16} /> {business.phone}</a>
               </div>
               {hero.trustPoints.length > 0 && (
@@ -98,7 +98,7 @@ export default function Home() {
 
       {/* STATS BAR */}
       {stats.length > 0 && (
-        <section className="border-y transition-colors duration-300" style={{ backgroundColor: isDark ? '#050505' : '#f0ece5', borderColor: border }}>
+        <section className="border-y transition-colors duration-300" style={{ backgroundColor: isDark ? '#050809' : '#f0ece5', borderColor: border }}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
             <div className={`grid grid-cols-2 md:grid-cols-3 ${statColumns[Math.min(stats.length, 6) - 1]} gap-6 text-center`}>
               {stats.map((stat, i) => (
@@ -126,7 +126,7 @@ export default function Home() {
                 <div className="group rounded-2xl overflow-hidden border transition-all duration-300 hover:shadow-lg" style={{ backgroundColor: cardBg, borderColor: border }}>
                   <div className="relative h-52 overflow-hidden">
                     {sign.images[0] && <img src={sign.images[0]} alt={sign.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" decoding="async" />}
-                    {sign.tag && <span className="absolute top-3 left-3 font-mono text-xs px-3 py-1 rounded-full" style={{ backgroundColor: accent, color: isDark ? '#0a0a0a' : '#fff' }}>{sign.tag}</span>}
+                    {sign.tag && <span className="absolute top-3 left-3 font-mono text-xs px-3 py-1 rounded-full" style={{ backgroundColor: accent, color: isDark ? '#080c0d' : '#fff' }}>{sign.tag}</span>}
                   </div>
                   <div className="p-6">
                     <div className="flex items-center justify-between mb-2">
@@ -141,7 +141,7 @@ export default function Home() {
             ))}
           </div>
           <FadeIn className="text-center mt-12">
-            <Link to="/sign-types" className="btn-primary" style={{ backgroundColor: accent, color: isDark ? '#0a0a0a' : '#fff' }}>{collection.buttonLabel} <ArrowRight size={16} /></Link>
+            <Link to="/sign-types" className="btn-primary" style={{ backgroundColor: accent, color: isDark ? '#080c0d' : '#fff' }}>{collection.buttonLabel} <ArrowRight size={16} /></Link>
           </FadeIn>
         </div>
       </section>
@@ -159,7 +159,7 @@ export default function Home() {
               {process.steps.map((step, i) => (
                 <FadeIn key={i} delay={i * 0.15}>
                   <div className="text-center p-8 rounded-2xl border h-full transition-all duration-300 hover:shadow-md" style={{ backgroundColor: cardBg, borderColor: border }}>
-                    <div className="inline-flex items-center justify-center w-14 h-14 rounded-xl mb-5 font-trajan font-bold text-xl" style={{ backgroundColor: isDark ? 'rgba(0,243,255,0.1)' : 'rgba(13,148,136,0.1)', color: accent, border: `1px solid ${isDark ? 'rgba(0,243,255,0.2)' : 'rgba(13,148,136,0.2)'}` }}>{String(i + 1).padStart(2, '0')}</div>
+                    <div className="inline-flex items-center justify-center w-14 h-14 rounded-xl mb-5 font-trajan font-bold text-xl" style={{ backgroundColor: isDark ? 'rgba(253,70,1,0.1)' : 'rgba(196,53,0,0.1)', color: accent, border: `1px solid ${isDark ? 'rgba(253,70,1,0.2)' : 'rgba(196,53,0,0.2)'}` }}>{String(i + 1).padStart(2, '0')}</div>
                     <h3 className="font-trajan font-semibold text-lg mb-3" style={{ color: heading }}>{step.title}</h3>
                     <p className="font-helvetica text-sm leading-relaxed" style={{ color: text }}>{step.desc}</p>
                   </div>
@@ -183,7 +183,7 @@ export default function Home() {
               {why.items.map((item, i) => (
                 <FadeIn key={i} delay={i * 0.1}>
                   <div className="p-8 rounded-2xl border h-full text-center transition-all duration-300 hover:shadow-md" style={{ backgroundColor: cardBg, borderColor: border }}>
-                    <div className="w-12 h-12 mx-auto mb-5 rounded-xl flex items-center justify-center" style={{ backgroundColor: isDark ? 'rgba(0,243,255,0.1)' : 'rgba(13,148,136,0.1)' }}>
+                    <div className="w-12 h-12 mx-auto mb-5 rounded-xl flex items-center justify-center" style={{ backgroundColor: isDark ? 'rgba(253,70,1,0.1)' : 'rgba(196,53,0,0.1)' }}>
                       <span className="font-trajan font-bold text-sm" style={{ color: accent }}>{item.icon}</span>
                     </div>
                     <h3 className="font-trajan font-semibold text-base mb-3" style={{ color: heading }}>{item.title}</h3>
@@ -273,13 +273,13 @@ export default function Home() {
       )}
 
       {/* CTA BANNER */}
-      <section className="py-20 md:py-28 border-t" style={{ backgroundColor: isDark ? '#050505' : '#f0ece5', borderColor: border }}>
+      <section className="py-20 md:py-28 border-t" style={{ backgroundColor: isDark ? '#050809' : '#f0ece5', borderColor: border }}>
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <FadeIn>
             <h2 className="font-trajan font-bold text-3xl md:text-4xl lg:text-5xl mb-6" style={{ color: heading }}>{cta.title}</h2>
             <p className="font-helvetica text-lg mb-10 max-w-xl mx-auto" style={{ color: text }}>{cta.text}</p>
             <div className="flex flex-wrap items-center justify-center gap-4">
-              <Link to="/quote" className="btn-primary" style={{ backgroundColor: accent, color: isDark ? '#0a0a0a' : '#fff' }}>{cta.buttonLabel} <ArrowRight size={16} /></Link>
+              <Link to="/quote" className="btn-primary" style={{ backgroundColor: accent, color: isDark ? '#080c0d' : '#fff' }}>{cta.buttonLabel} <ArrowRight size={16} /></Link>
               <a href={tel} className="btn-outline" style={{ border: `1px solid ${border}`, color: text }}><Phone size={16} /> {business.phone}</a>
             </div>
           </FadeIn>

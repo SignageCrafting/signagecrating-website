@@ -59,12 +59,12 @@ export default function Dashboard() {
 
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
         {cards.map(({ label, value, icon: Icon, to, accent, small }) => (
-          <Link key={label} to={to} className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition hover:border-teal-300 dark:border-slate-800 dark:bg-slate-900 dark:hover:border-teal-800">
+          <Link key={label} to={to} className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition hover:border-brand-300 dark:border-slate-800 dark:bg-slate-900 dark:hover:border-brand-800">
             <div className="flex items-center justify-between">
               <p className="text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">{label}</p>
-              <Icon size={16} className={accent ? 'text-teal-600 dark:text-teal-400' : 'text-slate-400'} />
+              <Icon size={16} className={accent ? 'text-brand-600 dark:text-brand-400' : 'text-slate-400'} />
             </div>
-            <p className={`mt-2 font-semibold ${small ? 'text-sm' : 'text-2xl'} ${accent ? 'text-teal-700 dark:text-teal-300' : 'text-slate-900 dark:text-white'}`}>{value}</p>
+            <p className={`mt-2 font-semibold ${small ? 'text-sm' : 'text-2xl'} ${accent ? 'text-brand-700 dark:text-brand-300' : 'text-slate-900 dark:text-white'}`}>{value}</p>
           </Link>
         ))}
       </div>
@@ -74,7 +74,7 @@ export default function Dashboard() {
           <h2 className="mb-4 text-sm font-semibold text-slate-900 dark:text-white">Edit your website</h2>
           <div className="grid gap-2 sm:grid-cols-2">
             {sections.map((s) => (
-              <Link key={s.id} to={`/admin/${s.id}`} className="flex items-center gap-3 rounded-lg border border-slate-200 px-3 py-2.5 text-sm font-medium text-slate-700 transition hover:border-teal-300 hover:bg-teal-50/50 dark:border-slate-800 dark:text-slate-200 dark:hover:border-teal-800 dark:hover:bg-teal-950/30">
+              <Link key={s.id} to={`/admin/${s.id}`} className="flex items-center gap-3 rounded-lg border border-slate-200 px-3 py-2.5 text-sm font-medium text-slate-700 transition hover:border-brand-300 hover:bg-brand-50/50 dark:border-slate-800 dark:text-slate-200 dark:hover:border-brand-800 dark:hover:bg-brand-950/30">
                 <s.icon size={16} className="text-slate-400" /> {s.title}
               </Link>
             ))}
@@ -83,7 +83,7 @@ export default function Dashboard() {
 
         <div className="space-y-6 lg:col-span-2">
           <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-            <h2 className="mb-4 flex items-center gap-2 text-sm font-semibold text-slate-900 dark:text-white"><ShieldCheck size={16} className="text-teal-600 dark:text-teal-400" /> Security</h2>
+            <h2 className="mb-4 flex items-center gap-2 text-sm font-semibold text-slate-900 dark:text-white"><ShieldCheck size={16} className="text-brand-600 dark:text-brand-400" /> Security</h2>
             <ul className="space-y-3">
               <Check ok={status.twoFactor} title={status.twoFactor ? '2-step verification is on' : '2-step verification is off'}>
                 {status.twoFactor ? 'Signing in needs a code from your authenticator app.' : 'Strongly recommended. Run "npm run admin:2fa" and add ADMIN_TOTP_SECRET in Hostinger.'}
@@ -115,7 +115,7 @@ export default function Dashboard() {
                 ['Test page speed', `https://pagespeed.web.dev/analysis?url=${encodeURIComponent(origin + '/')}`],
               ].map(([label, href]) => (
                 <li key={href}>
-                  <a href={href} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-teal-700 hover:underline dark:text-teal-300">{label} <ExternalLink size={12} /></a>
+                  <a href={href} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-brand-700 hover:underline dark:text-brand-300">{label} <ExternalLink size={12} /></a>
                 </li>
               ))}
             </ul>

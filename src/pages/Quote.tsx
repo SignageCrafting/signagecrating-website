@@ -18,8 +18,8 @@ export default function Quote() {
   const theme = useStore((s) => s.theme);
   const { quote } = useContent();
   const isDark = theme === 'dark';
-  const accent = isDark ? '#00f3ff' : '#0d9488';
-  const bg = isDark ? '#0a0a0a' : '#f8f5f0';
+  const accent = isDark ? '#fd4601' : '#c43500';
+  const bg = isDark ? '#080c0d' : '#f8f5f0';
   const cardBg = isDark ? '#111' : '#f0ece5';
   const border = isDark ? '#2a2a2a' : '#d4d0c8';
   const text = isDark ? '#888' : '#5a5a5a';
@@ -105,7 +105,7 @@ export default function Quote() {
               <input type="text" name="website" value={formData.website} onChange={handleChange} tabIndex={-1} autoComplete="off" aria-hidden="true" className="hidden" />
               {error && <p className="mt-6 font-helvetica text-sm text-center text-red-500" role="alert">{error}</p>}
               <div className="mt-8">
-                <button type="submit" disabled={sending} className="w-full btn-primary text-base py-4 disabled:opacity-60" style={{ backgroundColor: accent, color: isDark ? '#0a0a0a' : '#fff' }}>{sending ? 'SENDING…' : quote.submitLabel} <ArrowRight size={18} /></button>
+                <button type="submit" disabled={sending} className="w-full btn-primary text-base py-4 disabled:opacity-60" style={{ backgroundColor: accent, color: isDark ? '#080c0d' : '#fff' }}>{sending ? 'SENDING…' : quote.submitLabel} <ArrowRight size={18} /></button>
               </div>
               <div className="mt-4 flex flex-wrap items-center justify-center gap-6 text-xs font-helvetica" style={{ color: muted }}>
                 {quote.footnotes.map((note, i) => {

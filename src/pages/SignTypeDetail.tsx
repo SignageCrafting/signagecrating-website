@@ -13,8 +13,8 @@ export default function SignTypeDetail() {
 
   const others = signTypes.filter((s) => s.id !== sign.id);
   const isDark = theme === 'dark';
-  const accent = isDark ? '#00f3ff' : '#0d9488';
-  const bg = isDark ? '#0a0a0a' : '#f8f5f0';
+  const accent = isDark ? '#fd4601' : '#c43500';
+  const bg = isDark ? '#080c0d' : '#f8f5f0';
   const cardBg = isDark ? '#111' : '#f0ece5';
   const border = isDark ? '#2a2a2a' : '#d4d0c8';
   const text = isDark ? '#888' : '#5a5a5a';
@@ -51,7 +51,7 @@ export default function SignTypeDetail() {
               <ul className="grid sm:grid-cols-2 gap-3 mb-8">
                 {sign.features.map((feat, j) => (
                   <li key={j} className="flex items-center gap-3 font-helvetica text-sm" style={{ color: text }}>
-                    <span className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: isDark ? 'rgba(0,243,255,0.15)' : 'rgba(13,148,136,0.15)' }}>
+                    <span className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: isDark ? 'rgba(253,70,1,0.15)' : 'rgba(196,53,0,0.15)' }}>
                       <Check size={12} style={{ color: accent }} />
                     </span>
                     {feat}
@@ -63,7 +63,7 @@ export default function SignTypeDetail() {
               <p className="font-trajan font-semibold text-2xl mb-8" style={{ color: accent }}>{page.pricePrefix} {sign.startingPrice}</p>
             )}
             <div className="flex flex-wrap gap-4">
-              <Link to="/quote" className="btn-primary" style={{ backgroundColor: accent, color: isDark ? '#0a0a0a' : '#fff' }}>{page.quoteButtonLabel} <ArrowRight size={16} /></Link>
+              <Link to="/quote" className="btn-primary" style={{ backgroundColor: accent, color: isDark ? '#080c0d' : '#fff' }}>{page.quoteButtonLabel} <ArrowRight size={16} /></Link>
               <a href={telHref(business.phone)} className="btn-outline" style={{ border: `1px solid ${border}`, color: text }}><Phone size={16} /> {business.phone}</a>
             </div>
           </div>

@@ -8,14 +8,14 @@ export default function LegalPage({ page }: { page: LegalKey }) {
   const theme = useStore((s) => s.theme);
   const { title, lastUpdated, sections } = useContent().legal[page];
   const isDark = theme === 'dark';
-  const accent = isDark ? '#00f3ff' : '#0d9488';
+  const accent = isDark ? '#fd4601' : '#c43500';
   const headingColor = isDark ? '#fff' : '#1a1a1a';
   const textColor = isDark ? '#888' : '#5a5a5a';
   const cardBg = isDark ? '#111' : '#f0ece5';
   const borderColor = isDark ? '#2a2a2a' : '#d4d0c8';
 
   return (
-    <div className="pt-24 pb-20 transition-colors duration-300" style={{ backgroundColor: isDark ? '#0a0a0a' : '#f8f5f0' }}>
+    <div className="pt-24 pb-20 transition-colors duration-300" style={{ backgroundColor: isDark ? '#080c0d' : '#f8f5f0' }}>
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         <FadeIn eager className="text-center mb-16">
           <p className="font-mono text-xs tracking-[0.2em] uppercase mb-3" style={{ color: accent }}>Legal</p>

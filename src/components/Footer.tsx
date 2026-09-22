@@ -1,17 +1,17 @@
 import { Link } from 'react-router-dom';
 import { Phone, Mail, Clock, MapPin } from 'lucide-react';
 import { useStore } from '@/store/useStore';
-import { cityLine, fillTokens, telHref, useContent } from '@/content/store';
+import { cityLine, fillTokens, logoFor, telHref, useContent } from '@/content/store';
 
 export default function Footer() {
   const theme = useStore((s) => s.theme);
   const content = useContent();
   const { business, footer } = content;
   const isDark = theme === 'dark';
-  const accent = isDark ? '#00f3ff' : '#0d9488';
+  const accent = isDark ? '#fd4601' : '#c43500';
   const textColor = isDark ? '#888' : '#5a5a5a';
   const mutedColor = isDark ? '#555' : '#8a8a8a';
-  const bgColor = isDark ? '#050505' : '#f0ece5';
+  const bgColor = isDark ? '#050809' : '#f0ece5';
   const borderColor = isDark ? '#2a2a2a' : '#d4d0c8';
 
   return (
@@ -21,8 +21,8 @@ export default function Footer() {
           {/* Brand */}
           <div>
             <div className="flex items-center gap-2 mb-4">
-              {business.logoImage
-                ? <img src={business.logoImage} alt={business.name} className="h-8 w-auto" />
+              {logoFor(business, isDark)
+                ? <img src={logoFor(business, isDark)} alt={`${business.name} logo`} width={69} height={36} loading="lazy" className="h-9 w-auto" />
                 : <span className="font-trajan font-extrabold text-xl" style={{ color: accent }}>{business.logoText}</span>}
               <span className="font-trajan font-semibold text-sm" style={{ color: isDark ? '#fff' : '#1a1a1a' }}>{business.name}</span>
             </div>
@@ -37,7 +37,7 @@ export default function Footer() {
             <ul className="space-y-2.5">
               {footer.quickLinks.map((link, i) => (
                 <li key={`${link.path}-${i}`}>
-                  <Link to={link.path} className="font-helvetica text-sm transition-colors hover:text-[#00f3ff]" style={{ color: textColor }}>
+                  <Link to={link.path} className="font-helvetica text-sm transition-colors hover:text-[#fd4601]" style={{ color: textColor }}>
                     {link.label}
                   </Link>
                 </li>
@@ -51,7 +51,7 @@ export default function Footer() {
             <ul className="space-y-2.5">
               {footer.legalLinks.map((link, i) => (
                 <li key={`${link.path}-${i}`}>
-                  <Link to={link.path} className="font-helvetica text-sm transition-colors hover:text-[#00f3ff]" style={{ color: textColor }}>
+                  <Link to={link.path} className="font-helvetica text-sm transition-colors hover:text-[#fd4601]" style={{ color: textColor }}>
                     {link.label}
                   </Link>
                 </li>
@@ -66,13 +66,13 @@ export default function Footer() {
               {business.phone && (
                 <li className="flex items-center gap-2.5">
                   <Phone size={14} style={{ color: accent }} className="flex-shrink-0" />
-                  <a href={telHref(business.phone)} className="font-helvetica text-sm transition-colors hover:text-[#00f3ff]" style={{ color: textColor }}>{business.phone}</a>
+                  <a href={telHref(business.phone)} className="font-helvetica text-sm transition-colors hover:text-[#fd4601]" style={{ color: textColor }}>{business.phone}</a>
                 </li>
               )}
               {business.email && (
                 <li className="flex items-center gap-2.5">
                   <Mail size={14} style={{ color: accent }} className="flex-shrink-0" />
-                  <a href={`mailto:${business.email}`} className="font-helvetica text-sm transition-colors hover:text-[#00f3ff]" style={{ color: textColor }}>{business.email}</a>
+                  <a href={`mailto:${business.email}`} className="font-helvetica text-sm transition-colors hover:text-[#fd4601]" style={{ color: textColor }}>{business.email}</a>
                 </li>
               )}
               {business.hours && (
@@ -99,7 +99,7 @@ export default function Footer() {
           <p className="font-helvetica text-xs" style={{ color: mutedColor }}>{fillTokens(footer.copyright, content)}</p>
           <div className="flex items-center gap-6">
             {footer.bottomLinks.map((link, i) => (
-              <Link key={`${link.path}-${i}`} to={link.path} className="font-helvetica text-xs transition-colors hover:text-[#00f3ff]" style={{ color: mutedColor }}>{link.label}</Link>
+              <Link key={`${link.path}-${i}`} to={link.path} className="font-helvetica text-xs transition-colors hover:text-[#fd4601]" style={{ color: mutedColor }}>{link.label}</Link>
             ))}
           </div>
         </div>

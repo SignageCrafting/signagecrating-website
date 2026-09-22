@@ -12,8 +12,8 @@ export default function About() {
   const theme = useStore((s) => s.theme);
   const { business, about } = useContent();
   const isDark = theme === 'dark';
-  const accent = isDark ? '#00f3ff' : '#0d9488';
-  const bg = isDark ? '#0a0a0a' : '#f8f5f0';
+  const accent = isDark ? '#fd4601' : '#c43500';
+  const bg = isDark ? '#080c0d' : '#f8f5f0';
   const cardBg = isDark ? '#111' : '#f0ece5';
   const border = isDark ? '#2a2a2a' : '#d4d0c8';
   const text = isDark ? '#888' : '#5a5a5a';
@@ -66,7 +66,7 @@ export default function About() {
           {about.values.map((v, i) => (
             <FadeIn key={i} delay={i * 0.1}>
               <div className="p-6 rounded-2xl border h-full text-center transition-all duration-300 hover:shadow-md" style={{ backgroundColor: cardBg, borderColor: border }}>
-                <div className="w-12 h-12 mx-auto mb-4 rounded-xl flex items-center justify-center" style={{ backgroundColor: isDark ? 'rgba(0,243,255,0.1)' : 'rgba(13,148,136,0.1)' }}>
+                <div className="w-12 h-12 mx-auto mb-4 rounded-xl flex items-center justify-center" style={{ backgroundColor: isDark ? 'rgba(253,70,1,0.1)' : 'rgba(196,53,0,0.1)' }}>
                   <span className="font-trajan font-bold text-sm" style={{ color: accent }}>{v.icon}</span>
                 </div>
                 <h3 className="font-trajan font-semibold text-base mb-2" style={{ color: heading }}>{v.title}</h3>
@@ -77,12 +77,12 @@ export default function About() {
         </div>
 
         {/* CTA */}
-        <FadeIn className="text-center p-10 rounded-2xl border" style={{ backgroundColor: isDark ? '#050505' : '#f0ece5', borderColor: border }}>
+        <FadeIn className="text-center p-10 rounded-2xl border" style={{ backgroundColor: isDark ? '#050809' : '#f0ece5', borderColor: border }}>
           <h2 className="font-trajan font-bold text-2xl md:text-3xl mb-4" style={{ color: heading }}>{about.ctaTitle}</h2>
           <p className="font-helvetica text-base mb-6" style={{ color: text }}>{about.ctaText}</p>
           <div className="flex flex-wrap items-center justify-center gap-4">
             <a href={telHref(business.phone)} className="btn-outline text-sm" style={{ border: `1px solid ${border}`, color: text }}><Phone size={14} /> {business.phone}</a>
-            <Link to="/quote" className="btn-primary text-sm" style={{ backgroundColor: accent, color: isDark ? '#0a0a0a' : '#fff' }}>{about.ctaButtonLabel} <ArrowRight size={14} /></Link>
+            <Link to="/quote" className="btn-primary text-sm" style={{ backgroundColor: accent, color: isDark ? '#080c0d' : '#fff' }}>{about.ctaButtonLabel} <ArrowRight size={14} /></Link>
           </div>
         </FadeIn>
       </div>

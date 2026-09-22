@@ -52,7 +52,7 @@ function move<T>(list: T[], from: number, to: number) {
 
 function AddButton({ onClick, children }: { onClick: () => void; children: React.ReactNode }) {
   return (
-    <button type="button" onClick={onClick} className="inline-flex items-center gap-1.5 rounded-lg border border-dashed border-slate-300 px-3 py-2 text-sm font-medium text-slate-600 transition hover:border-teal-600 hover:text-teal-700 dark:border-slate-700 dark:text-slate-300 dark:hover:border-teal-400 dark:hover:text-teal-300">
+    <button type="button" onClick={onClick} className="inline-flex items-center gap-1.5 rounded-lg border border-dashed border-slate-300 px-3 py-2 text-sm font-medium text-slate-600 transition hover:border-brand-600 hover:text-brand-700 dark:border-slate-700 dark:text-slate-300 dark:hover:border-brand-400 dark:hover:text-brand-300">
       <Plus size={15} /> {children}
     </button>
   );
@@ -125,7 +125,7 @@ function ImagesField({ field, path, value }: { field: Extract<Field, { kind: 'im
             </div>
           </div>
         ))}
-        <button type="button" onClick={async () => { const url = await pickImage(); if (url) set([...value, url]); }} className="flex aspect-[4/3] flex-col items-center justify-center gap-1.5 rounded-lg border-2 border-dashed border-slate-300 text-sm font-medium text-slate-500 transition hover:border-teal-600 hover:text-teal-700 dark:border-slate-700 dark:text-slate-400 dark:hover:border-teal-400 dark:hover:text-teal-300">
+        <button type="button" onClick={async () => { const url = await pickImage(); if (url) set([...value, url]); }} className="flex aspect-[4/3] flex-col items-center justify-center gap-1.5 rounded-lg border-2 border-dashed border-slate-300 text-sm font-medium text-slate-500 transition hover:border-brand-600 hover:text-brand-700 dark:border-slate-700 dark:text-slate-400 dark:hover:border-brand-400 dark:hover:text-brand-300">
           <ImagePlus size={20} /> Add image
         </button>
       </div>
@@ -249,7 +249,7 @@ function FieldView({ field, path }: { field: Field; path: Path }) {
     case 'toggle':
       return (
         <label className="flex cursor-pointer items-start gap-3">
-          <button type="button" role="switch" aria-checked={!!value} onClick={() => update(full, !value)} className={`relative mt-0.5 inline-flex h-5 w-9 shrink-0 items-center rounded-full transition ${value ? 'bg-teal-600' : 'bg-slate-300 dark:bg-slate-700'}`}>
+          <button type="button" role="switch" aria-checked={!!value} onClick={() => update(full, !value)} className={`relative mt-0.5 inline-flex h-5 w-9 shrink-0 items-center rounded-full transition ${value ? 'bg-brand-700' : 'bg-slate-300 dark:bg-slate-700'}`}>
             <span className={`inline-block h-4 w-4 rounded-full bg-white shadow transition ${value ? 'translate-x-4' : 'translate-x-0.5'}`} />
           </button>
           <span>
