@@ -25,7 +25,9 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 const ROOT = path.dirname(fileURLToPath(import.meta.url));
 const DIST = path.join(ROOT, 'dist');
 const SSR_ENTRY = path.join(ROOT, 'dist-server', 'entry-server.js');
-const PORT = Number(process.env.PORT) || 3000;
+// Use PORT exactly as the host provides it: on Hostinger it can be a socket path
+// rather than a number, and converting it would make the app unreachable (503).
+const PORT = process.env.PORT || 3000;
 const DEFAULT_ADS_ID = 'AW-18436661648';
 
 // Hostinger runs the app from ~/domains/<domain>/hbuilds/..., which is replaced
@@ -35,7 +37,30 @@ function defaultDataDir() {
   return hostinger ? path.join(hostinger[1], 'cms-data') : path.join(ROOT, 'cms-data');
 }
 
-const DATA_DIR = path.resolve(process.env.DATA_DIR || defaultDataDir());
+console.log(`[server] Starting: Node ${process.version}, app folder ${ROOT}, PORT=${PORT}`);
+
+function usableDataDir(dir) {
+  try {
+    fs.mkdirSync(path.join(dir, 'uploads'), { recursive: true });
+    fs.mkdirSync(path.join(dir, 'history'), { recursive: true });
+    fs.accessSync(dir, fs.constants.W_OK);
+    return true;
+  } catch (err) {
+    console.error(`[server] Can't use data folder ${dir}: ${err.message}`);
+    return false;
+  }
+}
+
+// Prefer the persistent folder; if the host doesn't allow it, fall back to the
+// app folder so the site still runs (the admin Dashboard then shows a warning).
+let DATA_DIR = path.resolve(process.env.DATA_DIR || defaultDataDir());
+if (!usableDataDir(DATA_DIR)) {
+  const fallback = path.join(ROOT, 'cms-data');
+  if (fallback !== DATA_DIR && usableDataDir(fallback)) {
+    console.warn(`[server] Using ${fallback} instead. Set DATA_DIR to a writable folder outside the app so data survives redeploys.`);
+    DATA_DIR = fallback;
+  }
+}
 const UPLOADS_DIR = path.join(DATA_DIR, 'uploads');
 const HISTORY_DIR = path.join(DATA_DIR, 'history');
 const CONTENT_FILE = path.join(DATA_DIR, 'content.json');
@@ -43,8 +68,6 @@ const LEADS_FILE = path.join(DATA_DIR, 'leads.json');
 const AUDIT_FILE = path.join(DATA_DIR, 'audit.log');
 const SECRET_FILE = path.join(DATA_DIR, '.session-secret');
 
-fs.mkdirSync(UPLOADS_DIR, { recursive: true });
-fs.mkdirSync(HISTORY_DIR, { recursive: true });
 
 // ---------------------------------------------------------------------------
 // Admin credentials and sessions
@@ -67,7 +90,11 @@ function loadSessionSecret() {
     return fs.readFileSync(SECRET_FILE, 'utf8').trim();
   } catch {
     const secret = crypto.randomBytes(48).toString('hex');
-    fs.writeFileSync(SECRET_FILE, secret, { mode: 0o600 });
+    try {
+      fs.writeFileSync(SECRET_FILE, secret, { mode: 0o600 });
+    } catch (err) {
+      console.error(`[server] Can't store the session secret (${err.message}); admins will be signed out on restart.`);
+    }
     return secret;
   }
 }
@@ -234,7 +261,7 @@ async function recentAudit(limit) {
 }
 
 let savedContent = await readJson(CONTENT_FILE, null);
-let savedAt = savedContent ? (await fsp.stat(CONTENT_FILE)).mtime.toISOString() : null;
+let savedAt = savedContent ? (await fsp.stat(CONTENT_FILE).catch(() => null))?.mtime.toISOString() ?? null : null;
 
 // ---------------------------------------------------------------------------
 // Server-side rendering bundle
@@ -737,6 +764,10 @@ app.use((err, req, res, next) => {
 });
 
 process.on('unhandledRejection', (err) => console.error('[server] unhandled rejection', err));
+process.on('uncaughtException', (err) => {
+  console.error('[server] uncaught exception', err);
+  process.exit(1);
+});
 
 app.listen(PORT, () => {
   console.log(`[server] Signage Crafting running on port ${PORT}`);
