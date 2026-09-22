@@ -1,31 +1,23 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Layout from './components/Layout';
-import Home from './pages/Home';
-import SignTypes from './pages/SignTypes';
-import About from './pages/About';
-import Quote from './pages/Quote';
-import Contact from './pages/Contact';
-import Privacy from './pages/Privacy';
-import Terms from './pages/Terms';
-import Refund from './pages/Refund';
-import Shipping from './pages/Shipping';
+import { lazy, Suspense } from 'react';
+import { BrowserRouter } from 'react-router-dom';
+import ContentProvider from './content/ContentProvider';
+import SiteRoutes from './SiteRoutes';
+
+// Loaded only when someone opens /admin, so visitors never download it.
+const AdminApp = lazy(() => import('./admin/AdminApp'));
 
 export default function App() {
   return (
     <BrowserRouter>
-      <Layout>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/sign-types" element={<SignTypes />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/quote" element={<Quote />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/privacy" element={<Privacy />} />
-          <Route path="/terms" element={<Terms />} />
-          <Route path="/refund" element={<Refund />} />
-          <Route path="/shipping" element={<Shipping />} />
-        </Routes>
-      </Layout>
+      <ContentProvider>
+        <SiteRoutes
+          admin={
+            <Suspense fallback={<div className="min-h-screen bg-slate-50" />}>
+              <AdminApp />
+            </Suspense>
+          }
+        />
+      </ContentProvider>
     </BrowserRouter>
   );
 }

@@ -1,3 +1,9 @@
 node_modules
 dist
+dist-server
 .DS_Store
+
+# Admin data (saved content, uploads, form leads) never goes into git
+cms-data
+.env
+.env.*
