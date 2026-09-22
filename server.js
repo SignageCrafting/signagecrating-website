@@ -366,7 +366,9 @@ app.use((req, res, next) => {
   buildReady.then(() => next(), next);
 });
 
-function contentSecurityPolicy(nonce, secure) {
+// `forMeta` drops frame-ancestors, which browsers ignore in a <meta> tag
+// (X-Frame-Options covers framing instead).
+function contentSecurityPolicy(nonce, secure, forMeta = false) {
   return [
     "default-src 'self'",
     `script-src 'self' 'nonce-${nonce}' 'strict-dynamic' https: 'unsafe-inline'`,
@@ -379,7 +381,7 @@ function contentSecurityPolicy(nonce, secure) {
     "object-src 'none'",
     "base-uri 'self'",
     "form-action 'self'",
-    "frame-ancestors 'self'",
+    ...(forMeta ? [] : ["frame-ancestors 'self'"]),
     ...(secure ? ['upgrade-insecure-requests'] : []),
   ].join('; ');
 }
@@ -816,6 +818,9 @@ app.get('*', (req, res) => {
     html = html.split(DEFAULT_ADS_ID).join(adsId);
   }
   html = html.replace(/<script(?![^>]*\bnonce=)/g, `<script nonce="${nonce}"`);
+  // Hostinger's CDN replaces the Content-Security-Policy header with its own,
+  // so also put the policy in the page. It must come before the first script.
+  html = html.replace('<head>', `<head>\n    <meta http-equiv="Content-Security-Policy" content="${contentSecurityPolicy(nonce, req.secure, true)}" />`);
 
   res.set('Content-Security-Policy', contentSecurityPolicy(nonce, req.secure));
   res.status(status).type('html').send(html);
