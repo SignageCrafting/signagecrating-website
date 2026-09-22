@@ -76,9 +76,15 @@ const SECRET_FILE = path.join(DATA_DIR, '.session-secret');
 // Admin credentials and sessions
 // ---------------------------------------------------------------------------
 
-const ADMIN_USERNAME = (process.env.ADMIN_USERNAME || 'admin').trim();
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || '';
-const TOTP_SECRET = (process.env.ADMIN_TOTP_SECRET || '').replace(/\s+/g, '').toUpperCase();
+// Values pasted into the hosting panel often pick up spaces or quotes around
+// them, which would make a correct password fail. Strip those.
+function cleanSecret(value) {
+  return String(value ?? '').trim().replace(/^(['"])(.*)\1$/s, '$2').trim();
+}
+
+const ADMIN_USERNAME = (cleanSecret(process.env.ADMIN_USERNAME) || 'admin').toLowerCase();
+const ADMIN_PASSWORD = cleanSecret(process.env.ADMIN_PASSWORD);
+const TOTP_SECRET = cleanSecret(process.env.ADMIN_TOTP_SECRET).replace(/\s+/g, '').toUpperCase();
 const ADMIN_READY = ADMIN_PASSWORD.length >= 12;
 const SESSION_COOKIE = 'sc_admin';
 const SESSION_HOURS = 8;
@@ -524,14 +530,21 @@ api.post('/login', json('10kb'), async (req, res) => {
   }
   const { username, password, code } = req.body || {};
   // Check both before deciding so response time doesn't reveal which one was wrong.
-  const userOk = safeEqual(String(username || '').trim(), ADMIN_USERNAME);
-  const passOk = safeEqual(String(password || ''), ADMIN_PASSWORD);
+  const typedPassword = cleanSecret(password);
+  const userOk = safeEqual(cleanSecret(username).toLowerCase(), ADMIN_USERNAME);
+  const passOk = safeEqual(typedPassword, ADMIN_PASSWORD);
   const ok = userOk && passOk;
   const codeOk = ok ? verifyTotp(code) : false;
   if (!ok || !codeOk) {
     loginFailuresByIp.hit(ip);
     loginFailuresGlobal.hit('all');
-    await audit(req, 'login-failed', ok ? 'wrong 2-step code' : `user=${String(username || '').slice(0, 40)}`);
+    // Never log the password itself; just enough to tell a typo from a mismatch.
+    const why = ok
+      ? 'wrong 2-step code'
+      : !userOk
+        ? `unknown username "${cleanSecret(username).slice(0, 40)}"`
+        : `wrong password (${typedPassword.length === ADMIN_PASSWORD.length ? 'same length as' : 'different length from'} ADMIN_PASSWORD)`;
+    await audit(req, 'login-failed', why);
     await new Promise((r) => setTimeout(r, 600));
     return res.status(401).json({ error: ok ? 'That 6-digit code is not valid. Try the current code from your authenticator app.' : 'Wrong username or password.' });
   }
