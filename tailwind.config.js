@@ -33,7 +33,7 @@ module.exports = {
         /* Light theme palette */
         "lt-accent": "#c43500",
         "lt-accent-glow": "rgba(196, 53, 0, 0.3)",
-        "lt-bg": "#f8f5f0",
+        "lt-bg": "#ffffff",
         "lt-card": "#f0ece5",
         "lt-surface": "#e8e4dc",
         "lt-border": "#d4d0c8",

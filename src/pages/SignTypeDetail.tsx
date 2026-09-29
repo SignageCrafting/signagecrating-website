@@ -14,7 +14,7 @@ export default function SignTypeDetail() {
   const others = signTypes.filter((s) => s.id !== sign.id);
   const isDark = theme === 'dark';
   const accent = isDark ? '#fd4601' : '#c43500';
-  const bg = isDark ? '#080c0d' : '#f8f5f0';
+  const bg = isDark ? '#080c0d' : '#ffffff';
   const cardBg = isDark ? '#111' : '#f0ece5';
   const border = isDark ? '#2a2a2a' : '#d4d0c8';
   const text = isDark ? '#888' : '#5a5a5a';
