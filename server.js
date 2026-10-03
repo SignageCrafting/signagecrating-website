@@ -45,6 +45,7 @@ console.log(`[server] Starting: Node ${process.version}, app folder ${ROOT}, POR
 function usableDataDir(dir) {
   try {
     fs.mkdirSync(path.join(dir, 'uploads'), { recursive: true });
+    fs.mkdirSync(path.join(dir, 'lead-files'), { recursive: true });
     fs.mkdirSync(path.join(dir, 'history'), { recursive: true });
     fs.accessSync(dir, fs.constants.W_OK);
     return true;
@@ -65,6 +66,7 @@ if (!usableDataDir(DATA_DIR)) {
   }
 }
 const UPLOADS_DIR = path.join(DATA_DIR, 'uploads');
+const LEAD_FILES_DIR = path.join(DATA_DIR, 'lead-files');
 const HISTORY_DIR = path.join(DATA_DIR, 'history');
 const CONTENT_FILE = path.join(DATA_DIR, 'content.json');
 const LEADS_FILE = path.join(DATA_DIR, 'leads.json');
@@ -662,18 +664,49 @@ const LEAD_FIELDS = {
   contact: { name: 200, email: 200, phone: 50, message: 5000 },
 };
 
-api.post('/leads', json('32kb'), async (req, res) => {
+// Checked before the body is read, so large uploads can't be used to flood us.
+function leadRateGate(req, res, next) {
+  if (leadsByIp.blocked(req.ip) || leadsGlobal.blocked('all')) {
+    return res.status(429).json({ error: 'Too many submissions. Please call or email us instead.' });
+  }
+  next();
+}
+
+// Customers can attach photos or sketches of the sign they want.
+const MAX_LEAD_FILES = 3;
+const MAX_LEAD_FILE_BYTES = 6 * 1024 * 1024;
+
+async function saveLeadFiles(leadId, attachments) {
+  if (!Array.isArray(attachments) || attachments.length === 0) return [];
+  const dir = path.join(LEAD_FILES_DIR, leadId);
+  const saved = [];
+  for (const item of attachments.slice(0, MAX_LEAD_FILES)) {
+    if (!item || typeof item.data !== 'string') continue;
+    const buf = Buffer.from(item.data, 'base64');
+    const ext = detectImage(buf);
+    if (!ext || buf.length > MAX_LEAD_FILE_BYTES) continue;
+    const base = String(item.name || 'image')
+      .replace(/\.[^.]*$/, '')
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '')
+      .slice(0, 40) || 'image';
+    const name = `${saved.length + 1}-${base}.${ext}`;
+    if (saved.length === 0) await fsp.mkdir(dir, { recursive: true });
+    await fsp.writeFile(path.join(dir, name), buf, { mode: 0o600 });
+    saved.push({ name, size: buf.length, url: `/api/leads/${leadId}/files/${name}` });
+  }
+  return saved;
+}
+
+api.post('/leads', leadRateGate, json('24mb'), async (req, res) => {
   const ip = req.ip;
-  const { type, fields, page } = req.body || {};
+  const { type, fields, page, attachments } = req.body || {};
   const allowed = LEAD_FIELDS[type];
   if (!allowed || typeof fields !== 'object' || fields === null) return res.status(400).json({ error: 'Invalid form submission.' });
 
   // Bots fill the hidden "website" field; pretend it worked and drop it.
   if (typeof fields.website === 'string' && fields.website.trim()) return res.json({ ok: true });
-
-  if (leadsByIp.blocked(ip) || leadsGlobal.blocked('all')) {
-    return res.status(429).json({ error: 'Too many submissions. Please call or email us instead.' });
-  }
 
   const clean = {};
   for (const [key, max] of Object.entries(allowed)) {
@@ -688,8 +721,13 @@ api.post('/leads', json('32kb'), async (req, res) => {
 
   leadsByIp.hit(ip);
   leadsGlobal.hit('all');
+  const id = crypto.randomUUID();
+  const files = await saveLeadFiles(id, attachments).catch((err) => {
+    console.error('[leads] could not save attachments', err);
+    return [];
+  });
   const lead = {
-    id: crypto.randomUUID(),
+    id,
     type,
     createdAt: new Date().toISOString(),
     read: false,
@@ -697,18 +735,31 @@ api.post('/leads', json('32kb'), async (req, res) => {
     ip,
     userAgent: String(req.get('user-agent') || '').slice(0, 300),
     fields: clean,
+    files,
   };
   await withLock('leads', async () => {
     const leads = await readJson(LEADS_FILE, []);
     leads.unshift(lead);
     await writeJsonAtomic(LEADS_FILE, leads.slice(0, 5000));
   });
-  console.log(`[leads] new ${type} lead from ${clean.email}`);
+  console.log(`[leads] new ${type} lead from ${clean.email}${files.length ? ` with ${files.length} image(s)` : ''}`);
   res.json({ ok: true });
 });
 
 api.get('/leads', requireAdmin, async (req, res) => {
   res.json({ leads: await readJson(LEADS_FILE, []) });
+});
+
+api.get('/leads/:id/files/:name', requireAdmin, (req, res) => {
+  const { id, name } = req.params;
+  if (!/^[0-9a-f-]{36}$/i.test(id) || !/^[\w.-]{1,80}$/.test(name) || name.includes('..')) {
+    return res.status(400).json({ error: 'Invalid file.' });
+  }
+  res.sendFile(path.join(LEAD_FILES_DIR, id, name), {
+    headers: { 'Cache-Control': 'private, max-age=3600', 'Content-Security-Policy': "default-src 'none'; img-src 'self'; sandbox" },
+  }, (err) => {
+    if (err && !res.headersSent) res.status(404).json({ error: 'Not found.' });
+  });
 });
 
 api.patch('/leads/:id', requireAdmin, json('4kb'), async (req, res) => {
@@ -728,6 +779,9 @@ api.delete('/leads/:id', requireAdmin, async (req, res) => {
     const leads = await readJson(LEADS_FILE, []);
     await writeJsonAtomic(LEADS_FILE, leads.filter((l) => l.id !== req.params.id));
   });
+  if (/^[0-9a-f-]{36}$/i.test(req.params.id)) {
+    await fsp.rm(path.join(LEAD_FILES_DIR, req.params.id), { recursive: true, force: true }).catch(() => {});
+  }
   await audit(req, 'lead-deleted', req.params.id);
   res.json({ ok: true });
 });

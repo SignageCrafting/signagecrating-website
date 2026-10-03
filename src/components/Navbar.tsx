@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Phone, Menu, X, Sun, Moon } from 'lucide-react';
+import { Phone, Menu, X, Sun, Moon, MonitorSmartphone } from 'lucide-react';
 import { useStore } from '@/store/useStore';
 import { logoFor, telHref, useContent } from '@/content/store';
 
 export default function Navbar() {
-  const { mobileMenuOpen, toggleMobileMenu, closeMobileMenu, theme, toggleTheme } = useStore();
+  const { mobileMenuOpen, toggleMobileMenu, closeMobileMenu, theme, cycleTheme } = useStore();
   const { business, header } = useContent();
   const navLinks = header.navLinks;
   const tel = telHref(business.phone);
@@ -20,7 +20,8 @@ export default function Navbar() {
 
   const isActive = (path: string) => location.pathname === path;
 
-  const isDark = theme === 'dark';
+  const isDark = theme !== 'light';
+  const nextTheme = theme === 'dark' ? 'light' : theme === 'light' ? 'system' : 'dark';
 
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
@@ -34,7 +35,7 @@ export default function Navbar() {
           <Link to="/" className="flex items-center gap-2" onClick={closeMobileMenu}>
             {logoFor(business, isDark)
               ? <img src={logoFor(business, isDark)} alt={`${business.name} logo`} width={77} height={40} className="h-9 md:h-10 w-auto" />
-              : <span className="font-trajan font-extrabold text-xl" style={{ color: isDark ? '#fd4601' : '#c43500' }}>{business.logoText}</span>}
+              : <span className="font-trajan font-extrabold text-xl" style={{ color: '#ff5a1a' }}>{business.logoText}</span>}
             <span className="font-trajan font-semibold text-sm hidden sm:inline" style={{ color: isDark ? '#ffffff' : '#1a1a1a' }}>{business.name}</span>
           </Link>
 
@@ -44,7 +45,7 @@ export default function Navbar() {
               <Link key={`${link.path}-${i}`} to={link.path}
                 className={`font-helvetica text-sm whitespace-nowrap transition-colors duration-200 ${
                   isActive(link.path)
-                    ? isDark ? 'text-[#fd4601] border-b-2 border-[#fd4601] pb-0.5' : 'text-[#c43500] border-b-2 border-[#c43500] pb-0.5'
+                    ? isDark ? 'text-[#ff5a1a] border-b-2 border-[#ff5a1a] pb-0.5' : 'text-[#ff5a1a] border-b-2 border-[#ff5a1a] pb-0.5'
                     : isDark ? 'text-[#888] hover:text-white' : 'text-[#5a5a5a] hover:text-[#1a1a1a]'
                 }`}>
                 {link.label}
@@ -55,20 +56,20 @@ export default function Navbar() {
           {/* Right Side */}
           <div className="flex items-center gap-3 lg:gap-4">
             {header.showPhone && (
-              <a href={tel} className="hidden xl:inline-flex items-center gap-2 whitespace-nowrap font-helvetica text-sm font-medium" style={{ color: isDark ? '#fd4601' : '#c43500' }}>
+              <a href={tel} className="hidden xl:inline-flex items-center gap-2 whitespace-nowrap font-helvetica text-sm font-medium" style={{ color: '#ff5a1a' }}>
                 <Phone size={14} /> {business.phone}
               </a>
             )}
             {header.ctaLabel && (
               <Link to={header.ctaPath || '/quote'} className="hidden md:inline-flex whitespace-nowrap btn-primary text-xs py-2.5 px-5" style={{
-                backgroundColor: isDark ? '#fd4601' : '#c43500',
+                backgroundColor: '#ff5a1a',
                 color: isDark ? '#080c0d' : '#ffffff',
               }}>{header.ctaLabel}</Link>
             )}
 
             {/* Theme Toggle */}
-            <button onClick={toggleTheme} className="p-2 rounded-full transition-colors" style={{ color: isDark ? '#888' : '#5a5a5a' }} aria-label={isDark ? 'Switch to light theme' : 'Switch to dark theme'}>
-              {isDark ? <Sun size={18} /> : <Moon size={18} />}
+            <button onClick={cycleTheme} className="p-2 rounded-full transition-colors" style={{ color: isDark ? '#888' : '#5a5a5a' }} aria-label={`Theme: ${theme}. Switch to ${nextTheme} theme`} title={`Theme: ${theme}`}>
+              {theme === 'light' ? <Moon size={18} /> : theme === 'dark' ? <Sun size={18} /> : <MonitorSmartphone size={18} />}
             </button>
 
             {/* Mobile menu button */}
@@ -85,11 +86,11 @@ export default function Navbar() {
           <div className="px-4 py-6 space-y-4">
             {navLinks.map((link, i) => (
               <Link key={`${link.path}-${i}`} to={link.path} onClick={closeMobileMenu}
-                className={`block font-helvetica text-base py-2 ${isActive(link.path) ? (isDark ? 'text-[#fd4601]' : 'text-[#c43500]') : (isDark ? 'text-[#888]' : 'text-[#5a5a5a]')}`}>
+                className={`block font-helvetica text-base py-2 ${isActive(link.path) ? (isDark ? 'text-[#ff5a1a]' : 'text-[#ff5a1a]') : (isDark ? 'text-[#888]' : 'text-[#5a5a5a]')}`}>
                 {link.label}
               </Link>
             ))}
-            <a href={tel} className={`flex items-center gap-2 font-helvetica text-sm pt-4 border-t ${isDark ? 'text-[#fd4601] border-[#2a2a2a]' : 'text-[#c43500] border-[#d4d0c8]'}`}>
+            <a href={tel} className={`flex items-center gap-2 font-helvetica text-sm pt-4 border-t ${isDark ? 'text-[#ff5a1a] border-[#2a2a2a]' : 'text-[#ff5a1a] border-[#d4d0c8]'}`}>
               <Phone size={14} /> {business.phone}
             </a>
           </div>

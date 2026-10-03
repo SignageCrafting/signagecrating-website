@@ -18,16 +18,18 @@ import MediaLibrary, { MediaPickerDialog } from './MediaLibrary';
 function useAdminTheme() {
   const theme = useStore((s) => s.theme);
   const setTheme = useStore((s) => s.setTheme);
-  const toggleTheme = useStore((s) => s.toggleTheme);
   useEffect(() => {
     try {
       const saved = localStorage.getItem('theme');
-      if (saved === 'dark' || saved === 'light') setTheme(saved);
+      if (saved === 'dark' || saved === 'light' || saved === 'system') setTheme(saved);
     } catch {
       // Storage blocked; keep the default.
     }
   }, [setTheme]);
-  return { dark: theme === 'dark', toggleTheme };
+  // The admin itself is plain dark or light; "system" (the striped website look)
+  // shows as dark here.
+  const dark = theme !== 'light';
+  return { dark, toggleTheme: () => setTheme(dark ? 'light' : 'dark') };
 }
 
 const navItem = ({ isActive }: { isActive: boolean }) =>

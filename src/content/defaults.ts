@@ -50,7 +50,9 @@ export const defaultContent: SiteContent = {
       { label: 'Shipping Policy', path: '/shipping' },
     ],
     contactTitle: 'CONTACT',
+    socialTitle: 'FOLLOW US',
     copyright: '© {year} Signage Crafting. All rights reserved.',
+    credit: 'Project by HM & WM Inc.',
     bottomLinks: [
       { label: 'Privacy', path: '/privacy' },
       { label: 'Terms', path: '/terms' },
@@ -66,14 +68,14 @@ export const defaultContent: SiteContent = {
       features: ['Free digital mockup in 2 hours', 'Premium materials & craftsmanship', 'Free worldwide shipping'],
       ctaLabel: 'GET A FREE QUOTE',
       trustLabel: 'Every order includes:',
-      trustPoints: ['1-Year Warranty', 'Free Digital Mockup', 'Nationwide Delivery', 'No-Obligation Quote'],
+      trustPoints: ['2-Year Warranty', 'Free Digital Mockup', 'Nationwide Delivery', 'No-Obligation Quote'],
       cubeImages: ['/neon-sign-01.jpg', '/channel-letters-01.jpg', '/portfolio-01.jpg', '/blade-sign-01.jpg', '/metal-sign-01.jpg', '/monument-sign-01.jpg'],
     },
     stats: [
       { value: '15+', label: 'Years Experience' },
       { value: '10,000+', label: 'Signs Crafted' },
       { value: '3,500+', label: 'Happy Clients' },
-      { value: '1-Year', label: 'Warranty' },
+      { value: '2-Year', label: 'Warranty' },
       { value: '100%', label: 'Satisfaction' },
       { value: '24/7', label: 'Support' },
     ],
@@ -103,7 +105,7 @@ export const defaultContent: SiteContent = {
         { icon: 'Quality', title: 'Premium Materials', desc: 'We use only the highest-grade LEDs, acrylics, metals, and weatherproof components. Every sign is built to last.' },
         { icon: 'Speed', title: 'Fast Turnaround', desc: 'Most orders are manufactured and delivered within 13-17 working days of design approval. Rush orders available on request.' },
         { icon: 'Support', title: 'Expert Support', desc: 'Our team of designers and engineers guide you through every step, from concept to delivery.' },
-        { icon: 'Warranty', title: '1-Year Warranty', desc: 'Every custom sign comes with a 1-year limited warranty covering LED modules, power supplies, wiring and manufacturing defects.' },
+        { icon: 'Warranty', title: '2-Year Warranty', desc: 'Every custom sign comes with a 2-year limited warranty covering LED modules, power supplies, wiring and manufacturing defects.' },
       ],
     },
     portfolio: {
@@ -153,11 +155,11 @@ export const defaultContent: SiteContent = {
       startingPrice: '$299',
       shortDescription: 'Eye-catching LED neon signs with vibrant colors and custom shapes. Perfect for storefronts, bars, and modern interiors.',
       description: 'Our LED neon signs combine the classic look of traditional neon with modern energy-efficient technology. Perfect for bars, restaurants, retail stores, and home decor. Available in any color, shape, or font.',
-      features: ['LED neon technology', 'Custom shapes & fonts', 'Indoor & outdoor rated', 'Energy efficient', '1-year warranty'],
+      features: ['LED neon technology', 'Custom shapes & fonts', 'Indoor & outdoor rated', 'Energy efficient', '2-year warranty'],
       images: ['/neon-sign-01.jpg', '/neon-sign-02.jpg', '/neon-sign-03.jpg'],
       showOnHome: true,
       seoTitle: 'Custom LED Neon Signs for Business | Signage Crafting',
-      seoDescription: 'Custom LED neon signs in any color, font or logo. Energy-efficient, indoor & outdoor rated, 1-year warranty. Free mockup in 2 hours. From $299.',
+      seoDescription: 'Custom LED neon signs in any color, font or logo. Energy-efficient, indoor & outdoor rated, 2-year warranty. Free mockup in 2 hours. From $299.',
     },
     {
       id: 'light-box',
@@ -168,7 +170,7 @@ export const defaultContent: SiteContent = {
       startingPrice: '$450',
       shortDescription: 'Illuminated cabinet signs with even, bright lighting. Great for retail stores, restaurants, and professional offices.',
       description: 'Light box signs provide bright, even illumination that makes your brand visible day and night. Ideal for storefronts, shopping centers, and any business that needs to stand out after dark.',
-      features: ['Even illumination', 'Weatherproof', 'Custom graphics', 'Face-lit or backlit', '1-year warranty'],
+      features: ['Even illumination', 'Weatherproof', 'Custom graphics', 'Face-lit or backlit', '2-year warranty'],
       images: ['/portfolio-01.jpg', '/case-neon-01.jpg', '/case-signboard-02.jpg'],
       showOnHome: true,
       seoTitle: 'Custom Light Box Signs for Storefronts | Signage Crafting',
@@ -285,6 +287,8 @@ export const defaultContent: SiteContent = {
     badges: ['No obligation', 'Free mockup', '2-hour response'],
     signTypeOptions: ['Neon Signs', 'Light Box Signs', '3D Channel Letters', 'Blade Signs', 'Metal Signs', 'Monument Signs', 'Specialty/Custom', 'Not Sure - Need Advice'],
     budgetOptions: ['Under $500', '$500 - $1,000', '$1,000 - $2,500', '$2,500 - $5,000', '$5,000+', 'Not Sure'],
+    attachLabel: 'Add photos or sketches (optional)',
+    attachHelp: 'Up to 3 images, JPG or PNG. A photo of the wall or storefront, your logo, or a rough sketch all help us quote accurately.',
     submitLabel: 'GET MY FREE QUOTE',
     footnotes: ['Secure form', '2-hour response', 'No obligation'],
     successTitle: 'Quote Request Received!',
@@ -386,8 +390,8 @@ export const defaultContent: SiteContent = {
           "body": "**Mandatory 48-Hour Delivery Inspection**\n\nTo ensure any transit issues are swiftly addressed, we require you to inspect all shipping containers and physical products for visible damage or missing parts prior to signing for delivery.\n\n**Claims for Transit Damage**\n\nIf your signage arrives damaged, please file a claim in writing to **info@signagecrafting.com** within 48 hours of carrier delivery. You must include:\n\n- Clear photographic and video evidence of the damaged component.\n- Photos of the inner protective packaging.\n- Photos of the exterior shipping box showing the shipping label.\n\nPlease note that failure to report transit damage within this 48-hour window results in the product being deemed delivered free of defects and may void replacement obligations.\n\n**Production Timelines & Transit Estimates**\n\nWe strive to meet all estimated production and delivery timelines to ensure your project stays on schedule. However, because our custom signage involves intricate manufacturing processes and relies on third-party logistics, all provided dates are strictly estimates and cannot be guaranteed.\n\nPlease note that we are unable to offer financial compensation or issue refunds for transit or production delays, including those caused by supply chain variables, carrier disruptions, customs processing, or weather events. We appreciate your understanding that unexpected delays do not constitute a breach of our service agreement and do not qualify an order for cancellation or reimbursement."
         },
         {
-          "heading": "Section 6 - 1-Year Limited Warranty",
-          "body": "Signage Crafting proudly stands behind the engineering of its products. We provide a 1-year warranty on all custom signs covering manufacturing defects and internal electrical components (LED modules, power supplies, and internal wiring).\n\n- **Claims:** Please provide video/photo evidence demonstrating the operational fault. Upon verification, we will promptly ship replacement parts not the complete sign.\n- **Exclusions:** This warranty understandably does not cover damage caused by improper third-party installation, physical abuse, unapproved voltage modification, acts of God, or normal external weathering."
+          "heading": "Section 6 - 2-Year Limited Warranty",
+          "body": "Signage Crafting proudly stands behind the engineering of its products. We provide a 2-year warranty on all custom signs covering manufacturing defects and internal electrical components (LED modules, power supplies, and internal wiring).\n\n- **Claims:** Please provide video/photo evidence demonstrating the operational fault. Upon verification, we will promptly ship replacement parts not the complete sign.\n- **Exclusions:** This warranty understandably does not cover damage caused by improper third-party installation, physical abuse, unapproved voltage modification, acts of God, or normal external weathering."
         },
         {
           "heading": "Section 7 - Accuracy of Information & Modifications to Service",
@@ -440,8 +444,8 @@ export const defaultContent: SiteContent = {
           "body": "Due to the bespoke, handcrafted nature of our manufacturing process (including metal cutting, acrylic pouring, and edge polishing), slight variations in finish, texture, or micro-alignments may occur.\n\nFurthermore, we guarantee that color reproduction will be within 90% of the final digital proof you approved. Differences in perceived color may arise due to variations in individual computer screen calibrations, LED temperatures, and material substrates. By placing an order, you acknowledge and accept these potential variations as a natural part of custom manufacturing, and they do not qualify as defects for a refund.\n\n**AI-Generated Mockups:** Mockups and preview images created with AI-assisted design tools are for visualization purposes only and will not be 100% identical to the finished sign. Differences between an AI-generated mockup and the final manufactured product are not considered defects and do not qualify for a refund or replacement."
         },
         {
-          "heading": "7. 1-Year Limited Warranty",
-          "body": "We stand behind the premium quality and craftsmanship of our products. Signage Crafting offers a 1-year warranty on all custom signs covering internal electrical components (LED modules, power supplies, and wiring) and manufacturing defects.\n\nIf you experience operational issues during this period, please contact us with video evidence demonstrating the fault. Upon technical verification, we will promptly manufacture and ship replacement parts so your sign remains fully functional."
+          "heading": "7. 2-Year Limited Warranty",
+          "body": "We stand behind the premium quality and craftsmanship of our products. Signage Crafting offers a 2-year warranty on all custom signs covering internal electrical components (LED modules, power supplies, and wiring) and manufacturing defects.\n\nIf you experience operational issues during this period, please contact us with video evidence demonstrating the fault. Upon technical verification, we will promptly manufacture and ship replacement parts so your sign remains fully functional."
         },
         {
           "heading": "8. Contact & Customer Support",
@@ -510,7 +514,7 @@ export const defaultContent: SiteContent = {
       },
       {
         question: 'How long do LED neon signs last?',
-        answer: 'Quality LED neon is typically rated for around 50,000 hours of use, which is years of nightly operation. Every custom sign also comes with our 1-year limited warranty covering LED modules, power supplies, wiring and manufacturing defects.',
+        answer: 'Quality LED neon is typically rated for around 50,000 hours of use, which is years of nightly operation. Every custom sign also comes with our 2-year limited warranty covering LED modules, power supplies, wiring and manufacturing defects.',
       },
       {
         question: 'Do LED neon signs use a lot of electricity?',
@@ -534,7 +538,7 @@ export const defaultContent: SiteContent = {
       },
       {
         question: 'What warranty do your signs come with?',
-        answer: 'Every custom sign comes with a 1-year limited warranty covering internal electrical components (LED modules, power supplies and wiring) and manufacturing defects. If something stops working, send us a video of the fault and we will ship replacement parts once it is verified. See our [Terms of Service](/terms) for details.',
+        answer: 'Every custom sign comes with a 2-year limited warranty covering internal electrical components (LED modules, power supplies and wiring) and manufacturing defects. If something stops working, send us a video of the fault and we will ship replacement parts once it is verified. See our [Terms of Service](/terms) for details.',
       },
       {
         question: 'What do I need to get a quote?',

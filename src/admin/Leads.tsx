@@ -158,6 +158,18 @@ export default function Leads({ onUnreadChange }: { onUnreadChange: (n: number) 
                           <dd className="mt-0.5 whitespace-pre-wrap break-words text-sm text-slate-800 dark:text-slate-100">{v}</dd>
                         </div>
                       ))}
+                      {lead.files?.length ? (
+                        <div className="sm:col-span-2">
+                          <dt className="text-xs font-medium uppercase tracking-wide text-slate-400">Attached images ({lead.files.length})</dt>
+                          <dd className="mt-2 flex flex-wrap gap-3">
+                            {lead.files.map((file) => (
+                              <a key={file.url} href={file.url} target="_blank" rel="noopener noreferrer" title={`${file.name} (${Math.round(file.size / 1000)} KB)`} className="block h-28 w-40 overflow-hidden rounded-lg border border-slate-200 transition hover:border-brand-400 dark:border-slate-700">
+                                <img src={file.url} alt={file.name} className="h-full w-full object-cover" />
+                              </a>
+                            ))}
+                          </dd>
+                        </div>
+                      ) : null}
                       <div>
                         <dt className="text-xs font-medium uppercase tracking-wide text-slate-400">Received</dt>
                         <dd className="mt-0.5 text-sm text-slate-800 dark:text-slate-100">{when(lead.createdAt)}</dd>

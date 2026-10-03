@@ -1,24 +1,36 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowRight, Lock, Shield, Zap } from 'lucide-react';
+import { ArrowRight, ImagePlus, Loader2, Lock, Shield, X, Zap } from 'lucide-react';
 import { useStore } from '@/store/useStore';
 import FadeIn from '@/components/FadeIn';
 import { trackConversion } from '@/lib/googleAds';
 import { submitLead } from '@/lib/leads';
+import { blobToBase64, shrinkImage } from '@/lib/image';
 import { useContent } from '@/content/store';
 import MultiLine from '@/content/MultiLine';
 
 const footnoteIcons = [Lock, Zap, Shield];
+const MAX_IMAGES = 3;
+
+interface Attachment {
+  name: string;
+  preview: string;
+  data: string;
+  size: number;
+}
 
 export default function Quote() {
   const navigate = useNavigate();
   const [sending, setSending] = useState(false);
   const [error, setError] = useState('');
   const [formData, setFormData] = useState({ fullName: '', email: '', phone: '', businessName: '', signType: '', budget: '', details: '', website: '' });
+  const [attachments, setAttachments] = useState<Attachment[]>([]);
+  const [preparing, setPreparing] = useState(false);
+  const fileInput = useRef<HTMLInputElement>(null);
   const theme = useStore((s) => s.theme);
   const { quote } = useContent();
-  const isDark = theme === 'dark';
-  const accent = isDark ? '#fd4601' : '#c43500';
+  const isDark = theme !== 'light';
+  const accent = '#ff5a1a';
   const bg = isDark ? '#080c0d' : '#f8f5f0';
   const cardBg = isDark ? '#111' : '#f0ece5';
   const border = isDark ? '#2a2a2a' : '#d4d0c8';
@@ -31,12 +43,43 @@ export default function Quote() {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
+  const addImages = async (files: FileList | null) => {
+    if (!files?.length) return;
+    setPreparing(true);
+    setError('');
+    try {
+      const room = MAX_IMAGES - attachments.length;
+      const picked = Array.from(files).filter((f) => f.type.startsWith('image/')).slice(0, Math.max(0, room));
+      if (picked.length < files.length) {
+        setError(`You can attach up to ${MAX_IMAGES} images.`);
+      }
+      const prepared: Attachment[] = [];
+      for (const file of picked) {
+        const blob = await shrinkImage(file, 2000, 0.85);
+        prepared.push({ name: file.name, preview: URL.createObjectURL(blob), data: await blobToBase64(blob), size: blob.size });
+      }
+      setAttachments((prev) => [...prev, ...prepared]);
+    } catch {
+      setError('Sorry, one of those images could not be read. Please try another file.');
+    } finally {
+      setPreparing(false);
+      if (fileInput.current) fileInput.current.value = '';
+    }
+  };
+
+  const removeImage = (index: number) => {
+    setAttachments((prev) => {
+      URL.revokeObjectURL(prev[index].preview);
+      return prev.filter((_, i) => i !== index);
+    });
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSending(true);
     setError('');
     try {
-      await submitLead('quote', formData);
+      await submitLead('quote', formData, attachments.map(({ name, data }) => ({ name, data })));
       trackConversion('quoteFormLabel', 'generate_lead');
       navigate('/quote/thank-you');
     } catch (err) {
@@ -51,8 +94,8 @@ export default function Quote() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <FadeIn eager className="text-center mb-12">
           <p className="font-mono text-xs tracking-[0.2em] uppercase mb-3" style={{ color: accent }}>{quote.label}</p>
-          <h1 className="font-trajan font-bold text-3xl md:text-5xl mb-4" style={{ color: heading }}><MultiLine text={quote.title} /></h1>
-          <p className="font-helvetica text-base max-w-lg mx-auto mb-4" style={{ color: text }}>{quote.subtitle}</p>
+          <h1 className="font-trajan font-bold title-page mb-4" style={{ color: heading }}><MultiLine text={quote.title} /></h1>
+          <p className="font-helvetica text-base text-body max-w-lg mx-auto mb-4" style={{ color: text }}>{quote.subtitle}</p>
           <div className="flex flex-wrap items-center justify-center gap-4 text-xs font-helvetica" style={{ color: muted }}>
             {quote.badges.map((badge, i) => (
               <span key={i} className="flex items-center gap-1"><Zap size={12} style={{ color: accent }} /> {badge}</span>
@@ -102,10 +145,43 @@ export default function Quote() {
                   </div>
                 </div>
               </div>
+              <div className="mt-6">
+                <span className="block font-helvetica text-sm mb-2" style={{ color: text }}>{quote.attachLabel}</span>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                  {attachments.map((file, i) => (
+                    <div key={file.preview} className="relative rounded-xl overflow-hidden golden-box" style={{ border: `1px solid ${border}` }}>
+                      <img src={file.preview} alt={file.name} className="w-full h-full object-cover object-center" />
+                      <button
+                        type="button"
+                        onClick={() => removeImage(i)}
+                        aria-label={`Remove ${file.name}`}
+                        className="absolute top-1.5 right-1.5 w-7 h-7 rounded-full flex items-center justify-center transition-colors"
+                        style={{ backgroundColor: 'rgba(8,12,13,0.75)', color: '#fff' }}
+                      >
+                        <X size={14} />
+                      </button>
+                    </div>
+                  ))}
+                  {attachments.length < MAX_IMAGES && (
+                    <button
+                      type="button"
+                      onClick={() => fileInput.current?.click()}
+                      disabled={preparing}
+                      className="golden-box w-full rounded-xl flex flex-col items-center justify-center gap-1.5 font-helvetica text-xs transition-colors disabled:opacity-60"
+                      style={{ border: `1px dashed ${border}`, color: text, backgroundColor: inputBg }}
+                    >
+                      {preparing ? <Loader2 size={18} className="animate-spin" /> : <ImagePlus size={18} style={{ color: accent }} />}
+                      {preparing ? 'Preparing…' : 'Add image'}
+                    </button>
+                  )}
+                </div>
+                <input ref={fileInput} type="file" accept="image/jpeg,image/png,image/webp,image/gif" multiple className="hidden" onChange={(e) => addImages(e.target.files)} />
+                <p className="mt-2 font-helvetica text-xs" style={{ color: muted }}>{quote.attachHelp}</p>
+              </div>
               <input type="text" name="website" value={formData.website} onChange={handleChange} tabIndex={-1} autoComplete="off" aria-hidden="true" className="hidden" />
               {error && <p className="mt-6 font-helvetica text-sm text-center text-red-500" role="alert">{error}</p>}
               <div className="mt-8">
-                <button type="submit" disabled={sending} className="w-full btn-primary text-base py-4 disabled:opacity-60" style={{ backgroundColor: accent, color: isDark ? '#080c0d' : '#fff' }}>{sending ? 'SENDING…' : quote.submitLabel} <ArrowRight size={18} /></button>
+                <button type="submit" disabled={sending} className="w-full btn-primary text-base py-4 disabled:opacity-60" style={{ backgroundColor: accent, color: '#080c0d' }}>{sending ? 'SENDING…' : quote.submitLabel} <ArrowRight size={18} /></button>
               </div>
               <div className="mt-4 flex flex-wrap items-center justify-center gap-6 text-xs font-helvetica" style={{ color: muted }}>
                 {quote.footnotes.map((note, i) => {

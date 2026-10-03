@@ -14,8 +14,8 @@ export default function Contact() {
   const [formData, setFormData] = useState({ name: '', email: '', phone: '', message: '', website: '' });
   const theme = useStore((s) => s.theme);
   const { business, contact } = useContent();
-  const isDark = theme === 'dark';
-  const accent = isDark ? '#fd4601' : '#c43500';
+  const isDark = theme !== 'light';
+  const accent = '#ff5a1a';
   const bg = isDark ? '#080c0d' : '#f8f5f0';
   const cardBg = isDark ? '#111' : '#f0ece5';
   const border = isDark ? '#2a2a2a' : '#d4d0c8';
@@ -23,7 +23,7 @@ export default function Contact() {
   const muted = isDark ? '#555' : '#8a8a8a';
   const heading = isDark ? '#fff' : '#1a1a1a';
   const inputBg = isDark ? '#1a1a1a' : '#e8e4dc';
-  const iconBg = isDark ? 'rgba(253,70,1,0.1)' : 'rgba(196,53,0,0.1)';
+  const iconBg = 'var(--accent-soft)';
 
   const socials = [
     { url: business.social.instagram, Icon: Instagram, label: 'Instagram' },
@@ -56,12 +56,12 @@ export default function Contact() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <FadeIn eager className="text-center mb-12">
           <p className="font-mono text-xs tracking-[0.2em] uppercase mb-3" style={{ color: accent }}>{contact.label}</p>
-          <h1 className="font-trajan font-bold text-3xl md:text-5xl mb-4" style={{ color: heading }}>{contact.title}</h1>
-          <p className="font-helvetica text-base max-w-lg mx-auto" style={{ color: text }}>{contact.subtitle}</p>
+          <h1 className="font-trajan font-bold title-page mb-4" style={{ color: heading }}>{contact.title}</h1>
+          <p className="font-helvetica text-base text-body max-w-lg mx-auto" style={{ color: text }}>{contact.subtitle}</p>
         </FadeIn>
 
-        <div className="grid lg:grid-cols-5 gap-8">
-          <FadeIn className="lg:col-span-3">
+        <div className="grid lg:grid-cols-[1.618fr_1fr] gap-8">
+          <FadeIn>
               <form onSubmit={handleSubmit} className="p-8 space-y-5 rounded-2xl border transition-all duration-300" style={{ backgroundColor: cardBg, borderColor: border }}>
                 <div className="grid sm:grid-cols-2 gap-5">
                   <div>
@@ -83,11 +83,11 @@ export default function Contact() {
                 </div>
                 <input type="text" name="website" value={formData.website} onChange={handleChange} tabIndex={-1} autoComplete="off" aria-hidden="true" className="hidden" />
                 {error && <p className="font-helvetica text-sm text-center text-red-500" role="alert">{error}</p>}
-                <button type="submit" disabled={sending} className="w-full btn-primary disabled:opacity-60" style={{ backgroundColor: accent, color: isDark ? '#080c0d' : '#fff' }}>{sending ? 'SENDING…' : contact.submitLabel} <Send size={16} /></button>
+                <button type="submit" disabled={sending} className="w-full btn-primary disabled:opacity-60" style={{ backgroundColor: accent, color: '#080c0d' }}>{sending ? 'SENDING…' : contact.submitLabel} <Send size={16} /></button>
               </form>
           </FadeIn>
 
-          <FadeIn className="lg:col-span-2 space-y-6">
+          <FadeIn className="space-y-6">
             <div className="p-6 rounded-2xl border transition-all duration-300" style={{ backgroundColor: cardBg, borderColor: border }}>
               <h2 className="font-trajan font-semibold text-lg mb-5 tracking-wide" style={{ color: heading }}>{contact.infoTitle}</h2>
               <div className="space-y-4">
@@ -155,7 +155,7 @@ export default function Contact() {
 
         {address && (
           <FadeIn className="mt-10">
-            <div className="rounded-2xl h-72 overflow-hidden border" style={{ borderColor: border }}>
+            <div className="rounded-2xl golden-box overflow-hidden border" style={{ borderColor: border }}>
               <iframe
                 title={`Map of ${business.name}`}
                 src={`https://www.google.com/maps?q=${encodeURIComponent(`${business.name}, ${address}`)}&output=embed`}

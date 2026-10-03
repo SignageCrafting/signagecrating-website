@@ -96,7 +96,9 @@ export interface SiteContent {
     legalTitle: string;
     legalLinks: LinkItem[];
     contactTitle: string;
+    socialTitle: string;
     copyright: string;
+    credit: string;
     bottomLinks: LinkItem[];
   };
   home: {
@@ -154,6 +156,8 @@ export interface SiteContent {
     badges: string[];
     signTypeOptions: string[];
     budgetOptions: string[];
+    attachLabel: string;
+    attachHelp: string;
     submitLabel: string;
     footnotes: string[];
     successTitle: string;

@@ -31,7 +31,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     } catch {
       // Storage can be blocked (private mode); keep the default theme.
     }
-    if (saved === 'dark' || saved === 'light') {
+    if (saved === 'dark' || saved === 'light' || saved === 'system') {
       setTheme(saved);
       document.documentElement.setAttribute('data-theme', saved);
     } else {
@@ -41,8 +41,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="min-h-screen transition-colors duration-300" style={{
-      backgroundColor: theme === 'dark' ? '#080c0d' : '#f8f5f0',
-      color: theme === 'dark' ? '#ffffff' : '#1a1a1a',
+      backgroundColor: theme !== 'light' ? '#080c0d' : '#f8f5f0',
+      color: theme !== 'light' ? '#ffffff' : '#1a1a1a',
     }}>
       <Navbar />
       <main>{children}</main>

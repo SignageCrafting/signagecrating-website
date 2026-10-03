@@ -5,7 +5,7 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        /* Signage Crafting brand orange (from the logo, #FD4601). 700 is used for
+        /* Signage Crafting brand orange (from the logo, #ff5a1a). 700 is used for
            buttons with white text so they stay readable. */
         brand: {
           50: "#fff4ed",
@@ -13,16 +13,15 @@ module.exports = {
           200: "#ffc8aa",
           300: "#ffa074",
           400: "#ff6d38",
-          500: "#fd4601",
+          500: "#ff5a1a",
           600: "#e03c00",
-          700: "#c43500",
+          700: "#ff5a1a",
           800: "#9b2c07",
           900: "#7d270c",
           950: "#431004",
         },
         /* Dark theme palette */
-        "dt-accent": "#fd4601",
-        "dt-accent-glow": "rgba(253, 70, 1, 0.3)",
+        "dt-accent": "#ff5a1a",
         "dt-bg": "#080c0d",
         "dt-card": "#111111",
         "dt-surface": "#1a1a1a",
@@ -31,8 +30,7 @@ module.exports = {
         "dt-muted": "#555555",
 
         /* Light theme palette */
-        "lt-accent": "#c43500",
-        "lt-accent-glow": "rgba(196, 53, 0, 0.3)",
+        "lt-accent": "#ff5a1a",
         "lt-bg": "#f8f5f0",
         "lt-card": "#f0ece5",
         "lt-surface": "#e8e4dc",
@@ -71,17 +69,12 @@ module.exports = {
         "phi-3xl": "6.875rem",  /* 110px */
       },
       keyframes: {
-        "pulse-glow": {
-          "0%, 100%": { boxShadow: "0 0 20px rgba(253, 70, 1, 0.3)" },
-          "50%": { boxShadow: "0 0 40px rgba(253, 70, 1, 0.6)" },
-        },
         "spin-3d": {
           from: { transform: "rotateY(0deg) rotateX(10deg)" },
           to: { transform: "rotateY(360deg) rotateX(10deg)" },
         },
       },
       animation: {
-        "pulse-glow": "pulse-glow 2s ease-in-out infinite",
         "spin-3d": "spin-3d 20s linear infinite",
       },
     },

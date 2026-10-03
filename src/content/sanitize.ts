@@ -14,9 +14,19 @@ function cleanText(value: string, max: number) {
   return value.replace(CONTROL_CHARS, '').slice(0, max);
 }
 
+// Anything that could run code when clicked.
+const DANGEROUS = /^\s*(javascript|data|vbscript|file|blob)\s*:/i;
+const LOOKS_LIKE_DOMAIN = /^[a-z0-9-]+(\.[a-z0-9-]+)+(\/|\?|$)/i;
+
+// Accepts links the way people type them: "/about", "about", "example.com/x",
+// "www.example.com", "https://…", "mailto:…", "tel:…".
 function cleanLink(value: string) {
   const v = value.trim();
-  return v === '' || LINK_OK.test(v) ? v.slice(0, 500) : '';
+  if (v === '' || DANGEROUS.test(v)) return '';
+  if (LINK_OK.test(v)) return v.slice(0, 500);
+  if (LOOKS_LIKE_DOMAIN.test(v)) return `https://${v}`.slice(0, 500);
+  if (/^[a-z0-9][a-z0-9\-/]*$/i.test(v)) return `/${v}`.slice(0, 500);
+  return '';
 }
 
 function cleanImage(value: string) {
@@ -24,9 +34,13 @@ function cleanImage(value: string) {
   return v === '' || IMAGE_OK.test(v) ? v.slice(0, 500) : '';
 }
 
+// Social profile links: add https:// when it's missing, upgrade http://.
 function cleanHttps(value: string) {
-  const v = value.trim();
-  return v === '' || /^https:\/\/[^\s"'<>]+$/i.test(v) ? v.slice(0, 500) : '';
+  const v = value.trim().replace(/^http:\/\//i, 'https://');
+  if (v === '' || DANGEROUS.test(v)) return '';
+  if (/^https:\/\/[^\s"'<>]+$/i.test(v)) return v.slice(0, 500);
+  if (LOOKS_LIKE_DOMAIN.test(v)) return `https://${v}`.slice(0, 500);
+  return '';
 }
 
 function slug(value: string) {

@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Phone, Mail, Clock, MapPin } from 'lucide-react';
+import { Phone, Mail, Clock, MapPin, Instagram, Facebook, Linkedin } from 'lucide-react';
 import { useStore } from '@/store/useStore';
 import { cityLine, fillTokens, logoFor, telHref, useContent } from '@/content/store';
 
@@ -7,12 +7,17 @@ export default function Footer() {
   const theme = useStore((s) => s.theme);
   const content = useContent();
   const { business, footer } = content;
-  const isDark = theme === 'dark';
-  const accent = isDark ? '#fd4601' : '#c43500';
+  const isDark = theme !== 'light';
+  const accent = '#ff5a1a';
   const textColor = isDark ? '#888' : '#5a5a5a';
   const mutedColor = isDark ? '#555' : '#8a8a8a';
   const bgColor = isDark ? '#050809' : '#f0ece5';
   const borderColor = isDark ? '#2a2a2a' : '#d4d0c8';
+  const socials = [
+    { url: business.social.instagram, Icon: Instagram, label: 'Instagram' },
+    { url: business.social.facebook, Icon: Facebook, label: 'Facebook' },
+    { url: business.social.linkedin, Icon: Linkedin, label: 'LinkedIn' },
+  ].filter((s) => s.url);
 
   return (
     <footer className="border-t transition-colors duration-300" style={{ backgroundColor: bgColor, borderColor }}>
@@ -26,9 +31,29 @@ export default function Footer() {
                 : <span className="font-trajan font-extrabold text-xl" style={{ color: accent }}>{business.logoText}</span>}
               <span className="font-trajan font-semibold text-sm" style={{ color: isDark ? '#fff' : '#1a1a1a' }}>{business.name}</span>
             </div>
-            <p className="font-helvetica text-sm leading-relaxed" style={{ color: textColor }}>
+            <p className="font-helvetica text-sm text-body" style={{ color: textColor }}>
               {fillTokens(footer.description, content)}
             </p>
+            {socials.length > 0 && (
+              <div className="mt-6">
+                <h4 className="font-trajan font-semibold text-sm mb-3 tracking-wide" style={{ color: isDark ? '#fff' : '#1a1a1a' }}>{footer.socialTitle}</h4>
+                <div className="flex items-center gap-3">
+                  {socials.map(({ url, Icon, label }) => (
+                    <a
+                      key={label}
+                      href={url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={`${business.name} on ${label}`}
+                      className="w-10 h-10 rounded-lg flex items-center justify-center transition-colors hover:border-current"
+                      style={{ border: `1px solid ${borderColor}`, color: accent }}
+                    >
+                      <Icon size={18} />
+                    </a>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Quick Links */}
@@ -37,7 +62,7 @@ export default function Footer() {
             <ul className="space-y-2.5">
               {footer.quickLinks.map((link, i) => (
                 <li key={`${link.path}-${i}`}>
-                  <Link to={link.path} className="font-helvetica text-sm transition-colors hover:text-[#fd4601]" style={{ color: textColor }}>
+                  <Link to={link.path} className="font-helvetica text-sm transition-colors hover:text-[#ff5a1a]" style={{ color: textColor }}>
                     {link.label}
                   </Link>
                 </li>
@@ -51,7 +76,7 @@ export default function Footer() {
             <ul className="space-y-2.5">
               {footer.legalLinks.map((link, i) => (
                 <li key={`${link.path}-${i}`}>
-                  <Link to={link.path} className="font-helvetica text-sm transition-colors hover:text-[#fd4601]" style={{ color: textColor }}>
+                  <Link to={link.path} className="font-helvetica text-sm transition-colors hover:text-[#ff5a1a]" style={{ color: textColor }}>
                     {link.label}
                   </Link>
                 </li>
@@ -66,13 +91,13 @@ export default function Footer() {
               {business.phone && (
                 <li className="flex items-center gap-2.5">
                   <Phone size={14} style={{ color: accent }} className="flex-shrink-0" />
-                  <a href={telHref(business.phone)} className="font-helvetica text-sm transition-colors hover:text-[#fd4601]" style={{ color: textColor }}>{business.phone}</a>
+                  <a href={telHref(business.phone)} className="font-helvetica text-sm transition-colors hover:text-[#ff5a1a]" style={{ color: textColor }}>{business.phone}</a>
                 </li>
               )}
               {business.email && (
                 <li className="flex items-center gap-2.5">
                   <Mail size={14} style={{ color: accent }} className="flex-shrink-0" />
-                  <a href={`mailto:${business.email}`} className="font-helvetica text-sm transition-colors hover:text-[#fd4601]" style={{ color: textColor }}>{business.email}</a>
+                  <a href={`mailto:${business.email}`} className="font-helvetica text-sm transition-colors hover:text-[#ff5a1a]" style={{ color: textColor }}>{business.email}</a>
                 </li>
               )}
               {business.hours && (
@@ -96,10 +121,13 @@ export default function Footer() {
         </div>
 
         <div className="mt-12 pt-6 border-t flex flex-col sm:flex-row items-center justify-between gap-4" style={{ borderColor }}>
-          <p className="font-helvetica text-xs" style={{ color: mutedColor }}>{fillTokens(footer.copyright, content)}</p>
+          <p className="font-helvetica text-xs text-center sm:text-left" style={{ color: mutedColor }}>
+            {fillTokens(footer.copyright, content)}
+            {footer.credit && <span className="block sm:inline sm:ml-2">{fillTokens(footer.credit, content)}</span>}
+          </p>
           <div className="flex items-center gap-6">
             {footer.bottomLinks.map((link, i) => (
-              <Link key={`${link.path}-${i}`} to={link.path} className="font-helvetica text-xs transition-colors hover:text-[#fd4601]" style={{ color: mutedColor }}>{link.label}</Link>
+              <Link key={`${link.path}-${i}`} to={link.path} className="font-helvetica text-xs transition-colors hover:text-[#ff5a1a]" style={{ color: mutedColor }}>{link.label}</Link>
             ))}
           </div>
         </div>

@@ -27,6 +27,53 @@
   --text-3xl: 6.875rem;   /* 110px - clamp at 5rem on mobile */
 }
 
+/* One palette per theme. Sections read these variables, so a single section can
+   flip to the opposite tone by adding the .surface-invert class. */
+[data-theme="dark"],
+[data-theme="system"] {
+  --surface: #080c0d;
+  --surface-alt: #050809;
+  --card: #111315;
+  --border: #2a2a2a;
+  --heading: #ffffff;
+  --text: #8a8f91;
+  --muted: #5f6466;
+  --input: #1a1a1a;
+  --accent-soft: rgba(255, 255, 255, 0.06);
+  --accent-soft-border: rgba(255, 255, 255, 0.12);
+}
+
+[data-theme="light"] {
+  --surface: #f8f5f0;
+  --surface-alt: #f0ece5;
+  --card: #f0ece5;
+  --border: #d4d0c8;
+  --heading: #1a1a1a;
+  --text: #5a5a5a;
+  --muted: #8a8a8a;
+  --input: #e8e4dc;
+  --accent-soft: rgba(255, 90, 26, 0.1);
+  --accent-soft-border: rgba(255, 90, 26, 0.22);
+}
+
+/* Alternating light bands: only in the "system" look. Dark stays fully dark. */
+[data-theme="system"] .surface-invert {
+  --surface: #f6f4f0;
+  --surface-alt: #ece8e1;
+  --card: #ffffff;
+  --border: #ded9d1;
+  --heading: #12161a;
+  --text: #4c5154;
+  --muted: #7d8386;
+  --input: #efece6;
+  --accent-soft: rgba(255, 90, 26, 0.1);
+  --accent-soft-border: rgba(255, 90, 26, 0.22);
+}
+
+:root {
+  --accent: #ff5a1a;
+}
+
 @layer base {
   html {
     scroll-behavior: smooth;
@@ -56,12 +103,12 @@
 }
 
 ::selection {
-  background-color: rgba(253, 70, 1, 0.3);
+  background-color: rgba(255, 90, 26, 0.25);
   color: #ffffff;
 }
 
 [data-theme="light"] ::selection {
-  background-color: rgba(196, 53, 0, 0.3);
+  background-color: rgba(255, 90, 26, 0.3);
   color: #1a1a1a;
 }
 
@@ -100,6 +147,51 @@
 
   .section-label {
     @apply font-mono text-xs tracking-[0.2em] uppercase;
+  }
+
+  /* Golden ratio (φ = 1.618) image boxes: every photo sits in the same shape,
+     so cards and galleries line up on a shared grid. */
+  .golden-box {
+    aspect-ratio: 1.618 / 1;
+  }
+
+  .golden-portrait {
+    aspect-ratio: 1 / 1.618;
+  }
+
+  /* Type scale stepped by φ: 1 → 1.272 (√φ) → 1.618 → 2.618 (φ²) → 4.236 (φ³) */
+  .title-hero {
+    font-size: clamp(2.618rem, 5.6vw, 4.236rem);
+    line-height: 1.06;
+  }
+
+  .title-page {
+    font-size: clamp(2rem, 4.4vw, 3.236rem);
+    line-height: 1.12;
+  }
+
+  .title-section {
+    font-size: clamp(1.75rem, 3.4vw, 2.618rem);
+    line-height: 1.16;
+  }
+
+  .title-sub {
+    font-size: clamp(1.45rem, 2.4vw, 2rem);
+    line-height: 1.22;
+  }
+
+  .title-card {
+    font-size: 1.272rem;
+    line-height: 1.32;
+  }
+
+  .text-lead {
+    font-size: 1.129rem;
+    line-height: 1.618;
+  }
+
+  .text-body {
+    line-height: 1.618;
   }
 
   .golden-spacing {

@@ -38,6 +38,7 @@ export interface Lead {
   ip: string;
   userAgent: string;
   fields: Record<string, string>;
+  files?: { name: string; size: number; url: string }[];
 }
 
 export interface MediaItem {
@@ -80,18 +81,4 @@ export const api = {
 };
 
 // Large photos are scaled down before upload so pages stay fast.
-export async function prepareImage(file: File): Promise<Blob> {
-  const resizable = file.type === 'image/jpeg' || file.type === 'image/webp';
-  if (!resizable) return file;
-  const bitmap = await createImageBitmap(file).catch(() => null);
-  if (!bitmap) return file;
-  const max = 2000;
-  const scale = Math.min(1, max / Math.max(bitmap.width, bitmap.height));
-  if (scale === 1 && file.size < 1_200_000) return file;
-  const canvas = document.createElement('canvas');
-  canvas.width = Math.round(bitmap.width * scale);
-  canvas.height = Math.round(bitmap.height * scale);
-  canvas.getContext('2d')?.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
-  const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, file.type, 0.85));
-  return blob && blob.size < file.size ? blob : file;
-}
+export { shrinkImage as prepareImage } from '@/lib/image';
