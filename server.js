@@ -289,6 +289,52 @@ if (savedContent) {
   }
 }
 
+// One-off fixes to content that was already saved in /admin, where saved text
+// otherwise shadows the built-in wording. Each fix runs once and is recorded.
+const MIGRATIONS_FILE = path.join(DATA_DIR, 'migrations.json');
+
+const CONTENT_MIGRATIONS = [
+  {
+    id: 'warranty-2-years',
+    // The client confirmed the warranty is 2 years; saved text still said 1 year.
+    apply: (value) => (typeof value === 'string' ? value.replace(/\b1-Year\b/g, '2-Year').replace(/\b1-year\b/g, '2-year') : value),
+  },
+];
+
+function mapStrings(value, fn) {
+  if (typeof value === 'string') return fn(value);
+  if (Array.isArray(value)) return value.map((v) => mapStrings(v, fn));
+  if (value && typeof value === 'object') {
+    return Object.fromEntries(Object.entries(value).map(([k, v]) => [k, mapStrings(v, fn)]));
+  }
+  return value;
+}
+
+function runContentMigrations() {
+  if (!savedContent) return;
+  const done = readJsonSync(MIGRATIONS_FILE, []);
+  const pending = CONTENT_MIGRATIONS.filter((m) => !done.includes(m.id));
+  if (pending.length === 0) return;
+  let next = savedContent;
+  for (const migration of pending) next = mapStrings(next, migration.apply);
+  const changed = JSON.stringify(next) !== JSON.stringify(savedContent);
+  try {
+    if (changed) {
+      const stamp = new Date().toISOString().replace(/[:.]/g, '-');
+      fs.writeFileSync(path.join(HISTORY_DIR, `content-${stamp}.json`), JSON.stringify(savedContent, null, 2), { mode: 0o600 });
+      fs.writeFileSync(CONTENT_FILE, JSON.stringify(next, null, 2), { mode: 0o600 });
+      savedContent = next;
+      savedAt = new Date().toISOString();
+    }
+    fs.writeFileSync(MIGRATIONS_FILE, JSON.stringify([...done, ...pending.map((m) => m.id)], null, 2), { mode: 0o600 });
+    console.log(`[content] applied ${pending.map((m) => m.id).join(', ')}${changed ? '' : ' (nothing to change)'}`);
+  } catch (err) {
+    console.error('[content] could not apply updates:', err.message);
+  }
+}
+
+runContentMigrations();
+
 // ---------------------------------------------------------------------------
 // Server-side rendering bundle
 // ---------------------------------------------------------------------------
