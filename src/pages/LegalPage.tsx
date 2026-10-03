@@ -15,7 +15,7 @@ export default function LegalPage({ page }: { page: LegalKey }) {
   const borderColor = isDark ? '#2a2a2a' : '#d4d0c8';
 
   return (
-    <div className="pt-24 pb-20 transition-colors duration-300" style={{ backgroundColor: isDark ? '#080c0d' : '#f8f5f0' }}>
+    <div className="pt-24 pb-20 transition-colors duration-300" style={{ backgroundColor: isDark ? '#080c0d' : '#ffffff' }}>
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         <FadeIn eager className="text-center mb-16">
           <p className="font-mono text-xs tracking-[0.2em] uppercase mb-3" style={{ color: accent }}>Legal</p>

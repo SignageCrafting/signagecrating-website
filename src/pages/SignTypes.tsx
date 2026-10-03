@@ -15,7 +15,7 @@ export default function SignTypes() {
   const categories = [...new Set(signTypes.map((s) => s.category).filter(Boolean))];
   const isDark = theme !== 'light';
   const accent = '#ff5a1a';
-  const bg = isDark ? '#080c0d' : '#f8f5f0';
+  const bg = isDark ? '#080c0d' : '#ffffff';
   const border = isDark ? '#2a2a2a' : '#d4d0c8';
   const text = isDark ? '#888' : '#5a5a5a';
   const heading = isDark ? '#fff' : '#1a1a1a';

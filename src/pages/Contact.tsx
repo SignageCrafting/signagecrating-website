@@ -16,7 +16,7 @@ export default function Contact() {
   const { business, contact } = useContent();
   const isDark = theme !== 'light';
   const accent = '#ff5a1a';
-  const bg = isDark ? '#080c0d' : '#f8f5f0';
+  const bg = isDark ? '#080c0d' : '#ffffff';
   const cardBg = isDark ? '#111' : '#f0ece5';
   const border = isDark ? '#2a2a2a' : '#d4d0c8';
   const text = isDark ? '#888' : '#5a5a5a';

@@ -16,7 +16,7 @@ export default function ThankYou({ form }: { form: 'quote' | 'contact' }) {
   const text = isDark ? '#888' : '#5a5a5a';
 
   return (
-    <div className="pt-32 pb-24 px-4 transition-colors duration-300" style={{ backgroundColor: isDark ? '#080c0d' : '#f8f5f0' }}>
+    <div className="pt-32 pb-24 px-4 transition-colors duration-300" style={{ backgroundColor: isDark ? '#080c0d' : '#ffffff' }}>
       <div className="max-w-xl mx-auto text-center p-10 md:p-12 rounded-2xl border" style={{ backgroundColor: isDark ? '#111' : '#f0ece5', borderColor: accent }}>
         <div className="w-16 h-16 mx-auto mb-6 rounded-full flex items-center justify-center" style={{ backgroundColor: 'var(--accent-soft)' }}>
           <CheckCircle2 size={30} style={{ color: accent }} />

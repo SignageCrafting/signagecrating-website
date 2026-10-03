@@ -44,7 +44,7 @@
 }
 
 [data-theme="light"] {
-  --surface: #f8f5f0;
+  --surface: #ffffff;
   --surface-alt: #f0ece5;
   --card: #f0ece5;
   --border: #d4d0c8;
@@ -97,7 +97,7 @@
 
   /* LIGHT THEME */
   [data-theme="light"] body {
-    background-color: #f8f5f0;
+    background-color: #ffffff;
     color: #1a1a1a;
   }
 }

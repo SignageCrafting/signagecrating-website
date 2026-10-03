@@ -26,7 +26,7 @@ export default function Navbar() {
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
       scrolled
-        ? isDark ? 'bg-[#080c0d]/90 backdrop-blur-md border-b border-[#2a2a2a]' : 'bg-[#f8f5f0]/90 backdrop-blur-md border-b border-[#d4d0c8]'
+        ? isDark ? 'bg-[#080c0d]/90 backdrop-blur-md border-b border-[#2a2a2a]' : 'bg-[#ffffff]/90 backdrop-blur-md border-b border-[#d4d0c8]'
         : 'bg-transparent'
     }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -82,7 +82,7 @@ export default function Navbar() {
 
       {/* Mobile Menu */}
       {mobileMenuOpen && (
-        <div className={`md:hidden backdrop-blur-lg border-t ${isDark ? 'bg-[#080c0d]/98 border-[#2a2a2a]' : 'bg-[#f8f5f0]/98 border-[#d4d0c8]'}`}>
+        <div className={`md:hidden backdrop-blur-lg border-t ${isDark ? 'bg-[#080c0d]/98 border-[#2a2a2a]' : 'bg-[#ffffff]/98 border-[#d4d0c8]'}`}>
           <div className="px-4 py-6 space-y-4">
             {navLinks.map((link, i) => (
               <Link key={`${link.path}-${i}`} to={link.path} onClick={closeMobileMenu}
