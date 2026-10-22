@@ -24,6 +24,7 @@ import fs from 'node:fs';
 import fsp from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import { createProposalPaymentProxy } from './proposal-payment-proxy.js';
 
 const ROOT = path.dirname(fileURLToPath(import.meta.url));
 const DIST = path.join(ROOT, 'dist');
@@ -404,7 +405,16 @@ function scriptJson(value) {
 
 function siteOrigin(req) {
   const configured = savedContent?.seo?.siteUrl;
-  if (typeof configured === 'string' && /^https?:\/\/[a-z0-9.-]+(:\d+)?$/i.test(configured)) return configured;
+  if (typeof configured === 'string' && /^https?:\/\/[a-z0-9.-]+(:\d+)?$/i.test(configured)) {
+    try {
+      return new URL(configured).origin;
+    } catch {
+      // Ignore an invalid saved address, including an out-of-range port.
+    }
+  }
+  // Older admin content can leave Site address blank. Use one origin for the
+  // live domain's pages and SEO files even before that setting is filled in.
+  if (/^(www\.)?signagecrafting\.com$/i.test(req.hostname)) return 'https://signagecrafting.com';
   return `${req.protocol}://${req.get('host')}`;
 }
 
@@ -454,21 +464,16 @@ app.use((req, res, next) => {
 
 // Canonical host: force HTTPS and pick www / non-www to match the Site URL.
 app.use((req, res, next) => {
-  const host = req.get('host') || '';
+  const host = (req.get('host') || '').toLowerCase();
   const isLocal = /^(localhost|127\.0\.0\.1|\[::1\])(:\d+)?$/.test(host);
+  if (!isLocal) {
+    const want = new URL(siteOrigin(req));
+    if (want.host !== host && want.host.replace(/^www\./, '') === host.replace(/^www\./, '')) {
+      return res.redirect(301, `${want.origin}${req.originalUrl}`);
+    }
+  }
   if (!isLocal && req.get('x-forwarded-proto') === 'http') {
     return res.redirect(301, `https://${host}${req.originalUrl}`);
-  }
-  const configured = savedContent?.seo?.siteUrl;
-  if (!isLocal && typeof configured === 'string' && configured) {
-    try {
-      const want = new URL(configured).host;
-      if (want !== host && want.replace(/^www\./, '') === host.replace(/^www\./, '')) {
-        return res.redirect(301, `${new URL(configured).origin}${req.originalUrl}`);
-      }
-    } catch {
-      // Ignore a malformed Site URL; sanitizeContent prevents saving one.
-    }
   }
   next();
 });
@@ -496,6 +501,11 @@ app.use((req, res, next) => {
 // ---------------------------------------------------------------------------
 // Static files
 // ---------------------------------------------------------------------------
+
+app.use(createProposalPaymentProxy({
+  upstream: process.env.PROPOSAL_PAYMENTS_ORIGIN || 'https://proposal.controvallc.com',
+  siteOrigin,
+}));
 
 app.use(
   express.static(DIST, {
