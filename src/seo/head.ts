@@ -341,8 +341,7 @@ export function buildRobots(origin: string) {
     'Allow: /',
     'Disallow: /admin',
     'Disallow: /api/',
-    'Disallow: /quote/thank-you',
-    'Disallow: /contact/thank-you',
+    // Let crawlers read the noindex tag on form confirmation pages.
     '',
     `Sitemap: ${origin}/sitemap.xml`,
     '',

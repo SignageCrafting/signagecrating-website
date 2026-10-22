@@ -88,3 +88,23 @@ green.
    from it.
 5. In Google Ads, create conversion actions for the quote form, contact form and
    phone clicks, and paste their labels in the admin under **Google Ads**.
+
+## Proposal order pages
+
+The website relays only the public order pages to the proposal payment service:
+`/order/<opaque-token>` and the compatible `/payments/q/<opaque-token>` route,
+plus their checkout POSTs. These pages are excluded from search and caching.
+Staff APIs, payment settings, keys, and Stripe webhooks stay on the proposal
+server. Browser cookies and authorization headers are never forwarded.
+
+`PROPOSAL_PAYMENTS_ORIGIN` optionally overrides the proposal service origin;
+the default is `https://proposal.controvallc.com`. Use an HTTP loopback origin
+only for isolated local tests. Never point it at a customer-supplied URL.
+
+Deploy the matching proposal order-page implementation and this website before
+setting **Admin → Stripe payments → Customer order page** to
+`https://signagecrafting.com/order`. Leave the existing **Public proposal website**
+and webhook destination unchanged. A blank customer order-page setting preserves
+the previous payment links. Existing opaque quote tokens and old proposal links
+remain supported. Prices, options, paid state, consent, and Checkout Sessions are
+validated by the payment service, not by the website relay.
